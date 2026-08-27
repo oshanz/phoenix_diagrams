@@ -4,3 +4,42 @@
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark;
 }
+
+/* Override the built-in daisyUI "dark" theme (named "dark" so the existing
+   client-only theme-toggle wiring in mermaid_hook.js, which hardcodes the
+   "dark"/"light" identifiers, doesn't need to change). Modeled on the KDE
+   Breeze Dark palette - neutral greys (no blue tint) with a light blue
+   accent - which reads as higher-contrast and more legible for diagram
+   text than daisyUI's built-in "dark" theme. */
+@plugin "daisyui/theme" {
+  name: "dark";
+  color-scheme: dark;
+  --color-base-100: #232629;
+  --color-base-200: #1b1e20;
+  --color-base-300: #161819;
+  --color-base-content: #eff0f1;
+  --color-primary: #3daee9;
+  --color-primary-content: #0d1b21;
+  --color-secondary: #7f8c8d;
+  --color-secondary-content: #eff0f1;
+  --color-accent: #3daee9;
+  --color-accent-content: #0d1b21;
+  --color-neutral: #31363b;
+  --color-neutral-content: #eff0f1;
+  --color-info: #3daee9;
+  --color-info-content: #0d1b21;
+  --color-success: #27ae60;
+  --color-success-content: #0c1f14;
+  --color-warning: #f67400;
+  --color-warning-content: #211200;
+  --color-error: #ed1515;
+  --color-error-content: #200404;
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}

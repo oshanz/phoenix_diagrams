@@ -23,6 +23,35 @@ function systemPrefersDark() {
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
+// Matches the daisyUI "dark" theme colors in input.css (a neutral grey
+// palette modeled on KDE Breeze Dark). mermaid's built-in "dark" theme has
+// poor text/line contrast against that palette (labels can end up nearly
+// invisible), so the dark render uses the "base" theme with these explicit
+// variables instead.
+const DARK_THEME_VARIABLES = {
+  darkMode: true,
+  background: "#1b1e20",
+  mainBkg: "#31363b",
+  primaryColor: "#31363b",
+  primaryTextColor: "#eff0f1",
+  primaryBorderColor: "#3daee9",
+  secondaryColor: "#3a3f44",
+  secondaryTextColor: "#eff0f1",
+  secondaryBorderColor: "#7f8c8d",
+  tertiaryColor: "#232629",
+  tertiaryTextColor: "#eff0f1",
+  tertiaryBorderColor: "#4d4d4d",
+  lineColor: "#95a5a6",
+  textColor: "#eff0f1",
+  nodeTextColor: "#eff0f1",
+  edgeLabelBackground: "#1b1e20",
+  clusterBkg: "#232629",
+  clusterBorder: "#4d4d4d",
+  titleColor: "#eff0f1",
+  errorBkgColor: "#3b1c1c",
+  errorTextColor: "#f5b7b1",
+};
+
 function currentTheme(root) {
   return root.dataset.theme === "dark" ? "dark" : "light";
 }
@@ -59,7 +88,15 @@ export const ExDiagMermaid = {
 
     this.renderQueue = this.renderQueue
       .then(() => {
-        mermaid.initialize({ startOnLoad: false, theme: theme === "dark" ? "dark" : "default" });
+        mermaid.initialize(
+          theme === "dark"
+            ? {
+                startOnLoad: false,
+                theme: "base",
+                themeVariables: DARK_THEME_VARIABLES,
+              }
+            : { startOnLoad: false, theme: "default" },
+        );
         return mermaid.render(`ex-diag-${this.el.id}-svg`, source);
       })
       .then(({ svg }) => {

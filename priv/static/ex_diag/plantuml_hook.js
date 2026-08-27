@@ -27,6 +27,11 @@ export const ExDiagPlantuml = {
     if (!source) return;
 
     const el = this.el;
+    // renderToString has no dark-mode option (only PlantUML's render(...,
+    // {dark}) does) - the SVG is always rendered with dark text on a light
+    // background. Give it an explicit light backdrop so that text stays
+    // legible against the app's dark theme instead of turning invisible.
+    el.style.backgroundColor = currentTheme(this.root) === "dark" ? "#fff" : "";
 
     this.renderQueue = this.renderQueue.then(
       () =>
