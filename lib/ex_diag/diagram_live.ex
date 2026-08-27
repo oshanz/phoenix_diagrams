@@ -111,8 +111,8 @@ defmodule ExDiag.DiagramLive do
             <div class="card-body">
               <h2 class="card-title">{@selected[:name] || @selected.file}</h2>
               <div
-                id="ex-diag-mermaid"
-                phx-hook="ExDiagMermaid"
+                id="ex-diag-diagram"
+                phx-hook={diagram_hook(@selected)}
                 phx-update="ignore"
                 role="img"
                 aria-label={"Diagram: " <> (@selected[:name] || @selected.file)}
@@ -156,6 +156,9 @@ defmodule ExDiag.DiagramLive do
     </div>
     """
   end
+
+  defp diagram_hook(%{type: :plantuml}), do: "ExDiagPlantuml"
+  defp diagram_hook(_selected), do: "ExDiagMermaid"
 
   defp ex_diag_css, do: @ex_diag_css
 

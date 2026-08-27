@@ -14,14 +14,20 @@ defmodule ExDiag.Router do
       end
 
   ExDiag ships its own styles (inlined at render time, no host CSS required).
-  Its Mermaid rendering hook ships as a static file and must be registered in
-  your `app.js`:
+  Its Mermaid and PlantUML rendering hooks ship as static files and must be
+  registered in your `app.js`:
 
       import {ExDiagMermaid} from "ex_diag/priv/static/ex_diag/mermaid_hook"
+      import {ExDiagPlantuml} from "ex_diag/priv/static/ex_diag/plantuml_hook"
 
       let liveSocket = new LiveSocket("/live", Socket, {
-        hooks: {...myHooks, ExDiagMermaid}
+        hooks: {...myHooks, ExDiagMermaid, ExDiagPlantuml}
       })
+
+  The vendored PlantUML engine's Graphviz layout module falls back to a
+  Node-only code path that references the `url` builtin; add
+  `--external:url` to your `esbuild` args so bundling doesn't fail trying to
+  resolve it (that branch never runs in the browser).
   """
 
   @doc """

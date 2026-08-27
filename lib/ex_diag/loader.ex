@@ -8,7 +8,8 @@ defmodule ExDiag.Loader do
           key: String.t(),
           group: String.t(),
           name: String.t(),
-          source: String.t()
+          source: String.t(),
+          type: :mermaid | :plantuml
         }
 
   @type error_entry :: %{
@@ -69,13 +70,27 @@ defmodule ExDiag.Loader do
   end
 
   defp read_source(file, group, name, source_path) do
-    case File.read(source_path) do
-      {:ok, mermaid} ->
-        %{key: file, group: group, name: name, source: mermaid}
-
-      {:error, reason} ->
-        message = "could not read source file #{source_path}: #{:file.format_error(reason)}"
+    case source_type(source_path) do
+      {:error, message} ->
         error_entry(file, group, name, message)
+
+      {:ok, type} ->
+        case File.read(source_path) do
+          {:ok, source} ->
+            %{key: file, group: group, name: name, source: source, type: type}
+
+          {:error, reason} ->
+            message = "could not read source file #{source_path}: #{:file.format_error(reason)}"
+            error_entry(file, group, name, message)
+        end
+    end
+  end
+
+  defp source_type(source_path) do
+    case Path.extname(source_path) do
+      ".mmd" -> {:ok, :mermaid}
+      ".puml" -> {:ok, :plantuml}
+      ext -> {:error, "unsupported diagram source extension #{inspect(ext)} in #{source_path}"}
     end
   end
 

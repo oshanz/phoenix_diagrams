@@ -12,7 +12,26 @@ defmodule ExDiag.LoaderTest do
     assert entry.name == "System Overview"
     assert entry.source =~ "graph TD"
     assert entry.key =~ "overview.exs"
+    assert entry.type == :mermaid
     refute Map.has_key?(entry, :error)
+  end
+
+  test "loads a valid plantuml diagram entry" do
+    [entry] = Loader.scan(Path.join(@fixtures, "plantuml"))
+
+    assert entry.group == "Backend"
+    assert entry.name == "Login Sequence"
+    assert entry.source =~ "@startuml"
+    assert entry.type == :plantuml
+    refute Map.has_key?(entry, :error)
+  end
+
+  test "unsupported source extension produces an error entry" do
+    [entry] = Loader.scan(Path.join(@fixtures, "unsupported_extension"))
+
+    assert entry.group == "Backend"
+    assert entry.name == "Weird Source"
+    assert entry.error =~ "unsupported diagram source extension"
   end
 
   test "missing required key produces an error entry" do

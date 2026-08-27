@@ -1,0 +1,13 @@
+@startuml
+actor User
+participant "Web App" as App
+participant "Auth Service" as Auth
+database "User DB" as DB
+
+User -> App: Submit login form
+App -> Auth: Validate credentials
+Auth -> DB: Lookup user
+DB --> Auth: User record
+Auth --> App: Session token
+App --> User: Redirect to dashboard
+@enduml

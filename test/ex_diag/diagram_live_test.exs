@@ -36,8 +36,20 @@ defmodule ExDiag.DiagramLiveTest do
       |> element("button", "Auth Flow")
       |> render_click()
 
-    assert html =~ "ex-diag-mermaid"
+    assert has_element?(view, "#ex-diag-diagram[phx-hook=ExDiagMermaid]")
     assert html =~ "graph TD"
+  end
+
+  test "clicking a plantuml diagram name renders the detail pane with the plantuml hook" do
+    {:ok, view, _html} = live_isolated(build_conn(), ExDiag.DiagramLive)
+
+    html =
+      view
+      |> element("button", "Login Sequence")
+      |> render_click()
+
+    assert has_element?(view, "#ex-diag-diagram[phx-hook=ExDiagPlantuml]")
+    assert html =~ "@startuml"
   end
 
   test "clicking an error entry shows its error message instead of a diagram" do

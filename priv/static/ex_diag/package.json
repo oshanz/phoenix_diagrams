@@ -3,6 +3,7 @@
     "build:css": "tailwindcss -i input.css -o app.css --minify"
   },
   "dependencies": {
+    "@plantuml/core": "^1.2026.7",
     "mermaid": "^11.17.2"
   },
   "devDependencies": {

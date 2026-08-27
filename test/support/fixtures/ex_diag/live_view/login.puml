@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob: Login Request
+Bob --> Alice: Login Response
+@enduml
