@@ -36,7 +36,7 @@ defmodule ExDiag.DiagramLiveTest do
       |> element("button", "Auth Flow")
       |> render_click()
 
-    assert has_element?(view, "#ex-diag-diagram[phx-hook=ExDiagMermaid]")
+    assert has_element?(view, "#ex-diag-diagram-mermaid[phx-hook=ExDiagMermaid]")
     assert html =~ "graph TD"
   end
 
@@ -48,7 +48,7 @@ defmodule ExDiag.DiagramLiveTest do
       |> element("button", "Login Sequence")
       |> render_click()
 
-    assert has_element?(view, "#ex-diag-diagram[phx-hook=ExDiagPlantuml]")
+    assert has_element?(view, "#ex-diag-diagram-plantuml[phx-hook=ExDiagPlantuml]")
     assert html =~ "@startuml"
   end
 

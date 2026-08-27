@@ -9,7 +9,9 @@ defmodule ExDiag.DiagramLive do
   @impl true
   def mount(_params, _session, socket) do
     entries = Loader.scan(diagrams_path())
-    {:ok, assign(socket, entries: entries, groups: group_entries(entries), selected: nil)}
+    selected = Enum.find(entries, &(!Map.has_key?(&1, :error)))
+
+    {:ok, assign(socket, entries: entries, groups: group_entries(entries), selected: selected)}
   end
 
   @impl true
@@ -25,6 +27,7 @@ defmodule ExDiag.DiagramLive do
     ~H"""
     {Phoenix.HTML.raw("<style>" <> ex_diag_css() <> "</style>")}
     <div id="ex-diag-root" phx-hook="ExDiagTheme" class="ex-diag-root drawer lg:drawer-open">
+      {Phoenix.HTML.raw("<script>" <> initial_theme_script() <> "</script>")}
       <input id="ex-diag-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex flex-col">
         <div class="navbar bg-base-200">
@@ -111,7 +114,7 @@ defmodule ExDiag.DiagramLive do
             <div class="card-body">
               <h2 class="card-title">{@selected[:name] || @selected.file}</h2>
               <div
-                id="ex-diag-diagram"
+                id={"ex-diag-diagram-" <> to_string(@selected.type)}
                 phx-hook={diagram_hook(@selected)}
                 phx-update="ignore"
                 role="img"
@@ -161,6 +164,20 @@ defmodule ExDiag.DiagramLive do
   defp diagram_hook(_selected), do: "ExDiagMermaid"
 
   defp ex_diag_css, do: @ex_diag_css
+
+  @initial_theme_script """
+  (function () {
+    var root = document.currentScript.parentElement;
+    var stored = null;
+    try {
+      stored = window.localStorage.getItem("ex_diag_theme");
+    } catch (e) {}
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = stored || (prefersDark ? "dark" : "light");
+  })();
+  """
+
+  defp initial_theme_script, do: @initial_theme_script
 
   defp diagrams_path do
     Application.get_env(:ex_diag, :diagrams_path, Path.join(File.cwd!(), "priv/ex_diag"))
