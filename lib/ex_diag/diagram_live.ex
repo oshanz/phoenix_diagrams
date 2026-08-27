@@ -28,13 +28,27 @@ defmodule ExDiag.DiagramLive do
       <input id="ex-diag-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex flex-col">
         <div class="navbar bg-base-200 lg:hidden">
-          <label for="ex-diag-drawer" class="btn btn-square btn-ghost drawer-button">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <label
+            for="ex-diag-drawer"
+            aria-label="open sidebar"
+            class="btn btn-square btn-ghost drawer-button"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </label>
           <span class="ml-2 font-semibold">Diagrams</span>
         </div>
+        <p class="sr-only" role="status">
+          {(@selected && (@selected[:name] || @selected.file)) || "No diagram selected"}
+        </p>
         <main class="ex-diag-detail flex-1 overflow-auto p-6">
           <div :if={is_nil(@selected)} class="hero min-h-[50vh]">
             <div class="hero-content text-center">
@@ -58,6 +72,8 @@ defmodule ExDiag.DiagramLive do
                 id="ex-diag-mermaid"
                 phx-hook="ExDiagMermaid"
                 phx-update="ignore"
+                role="img"
+                aria-label={"Diagram: " <> (@selected[:name] || @selected.file)}
                 data-source={@selected.source}
               >
                 <pre class="mermaid">{@selected.source}</pre>
@@ -68,7 +84,7 @@ defmodule ExDiag.DiagramLive do
       </div>
       <div class="drawer-side">
         <label for="ex-diag-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-        <nav class="ex-diag-sidebar menu bg-base-200 min-h-full w-72 p-4 gap-1">
+        <nav aria-label="Diagrams" class="ex-diag-sidebar menu bg-base-200 min-h-full w-72 p-4 gap-1">
           <p :if={@entries == []} class="px-2 text-sm text-base-content/60">
             No diagrams found in {diagrams_path()}
           </p>
@@ -79,9 +95,15 @@ defmodule ExDiag.DiagramLive do
                 <button
                   phx-click="select"
                   phx-value-key={entry.key}
+                  aria-current={@selected && @selected.key == entry.key && "true"}
                   class={entry_class(entry, @selected)}
                 >
-                  <span :if={Map.has_key?(entry, :error)} class="badge badge-error badge-xs"></span>
+                  <span
+                    :if={Map.has_key?(entry, :error)}
+                    class="badge badge-error badge-xs"
+                    aria-hidden="true"
+                  ></span>
+                  <span :if={Map.has_key?(entry, :error)} class="sr-only">Error loading:</span>
                   {entry[:name] || entry.file}
                 </button>
               </li>

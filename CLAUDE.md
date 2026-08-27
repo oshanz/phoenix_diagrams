@@ -35,6 +35,7 @@ The `demo/` app has its own independent toolchain (`cd demo && mix phx.server`, 
 - **Self-contained, zero host-asset coupling.** ExDiag must render and function correctly without the host app editing its own `app.css`/`app.js`. Styles are compiled here and inlined at render time; JS hooks are vendored here and only need one import line in the host's hooks list — never require host-side implementation code or a host-managed npm dependency.
 - **Never crash the host page on bad input.** Malformed diagram definitions (missing keys, unreadable files, eval errors) become error entries rendered inline (see `Loader`/`DiagramLive`), not exceptions — a broken `.exs` in one group must not take down the whole diagram browser.
 - **daisyUI for structure, not host theming.** Use daisyUI component classes (`drawer`, `menu`, `card`, `alert`, etc.) for layout/behavior; the library ships both light/dark daisyUI themes itself so it looks correct regardless of the host's own design system.
+- **Target WCAG 2.1 AA.** `DiagramLive` markup should carry proper ARIA (`aria-label`/`aria-current`/`role="status"`/`role="img"` for the rendered mermaid SVG, `aria-hidden` on decorative icons) — verify with `mix test` plus a manual pass in `demo/` for color contrast and focus visibility, which aren't checkable from markup alone.
 
 ## Gotchas
 
