@@ -1,5 +1,13 @@
 {
+  "scripts": {
+    "build:css": "tailwindcss -i input.css -o app.css --minify"
+  },
   "dependencies": {
     "mermaid": "^11.17.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "daisyui": "^5.7.22",
+    "tailwindcss": "^4.3.3"
   }
 }

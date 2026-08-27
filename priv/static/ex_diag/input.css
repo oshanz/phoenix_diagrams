@@ -1,0 +1,6 @@
+@import "tailwindcss" source(none);
+@source "../../../lib/ex_diag";
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}

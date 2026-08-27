@@ -3,6 +3,9 @@ defmodule ExDiag.DiagramLive do
 
   alias ExDiag.Loader
 
+  @ex_diag_css Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/app.css") |> File.read!()
+  @external_resource Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/app.css")
+
   @impl true
   def mount(_params, _session, socket) do
     entries = Loader.scan(diagrams_path())
@@ -20,43 +23,77 @@ defmodule ExDiag.DiagramLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="ex-diag-layout">
-      <nav class="ex-diag-sidebar">
-        <p :if={@entries == []}>No diagrams found in {diagrams_path()}</p>
-        <div :for={{group, group_entries} <- @groups} class="ex-diag-group">
-          <h3>{group}</h3>
-          <ul>
-            <li :for={entry <- group_entries}>
-              <button
-                phx-click="select"
-                phx-value-key={entry.key}
-                class={entry_class(entry, @selected)}
+    {Phoenix.HTML.raw("<style>" <> ex_diag_css() <> "</style>")}
+    <div class="ex-diag-root drawer lg:drawer-open">
+      <input id="ex-diag-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col">
+        <div class="navbar bg-base-200 lg:hidden">
+          <label for="ex-diag-drawer" class="btn btn-square btn-ghost drawer-button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </label>
+          <span class="ml-2 font-semibold">Diagrams</span>
+        </div>
+        <main class="ex-diag-detail flex-1 overflow-auto p-6">
+          <div :if={is_nil(@selected)} class="hero min-h-[50vh]">
+            <div class="hero-content text-center">
+              <p class="text-base-content/60">Select a diagram from the sidebar.</p>
+            </div>
+          </div>
+          <div
+            :if={@selected && Map.has_key?(@selected, :error)}
+            role="alert"
+            class="ex-diag-error alert alert-error"
+          >
+            <span><strong>Error loading {@selected.file}:</strong> {@selected.error}</span>
+          </div>
+          <div
+            :if={@selected && !Map.has_key?(@selected, :error)}
+            class="card bg-base-100 shadow-sm border border-base-300"
+          >
+            <div class="card-body">
+              <h2 class="card-title">{@selected[:name] || @selected.file}</h2>
+              <div
+                id="ex-diag-mermaid"
+                phx-hook="ExDiagMermaid"
+                phx-update="ignore"
+                data-source={@selected.source}
               >
-                {entry[:name] || entry.file}
-              </button>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <main class="ex-diag-detail">
-        <p :if={is_nil(@selected)}>Select a diagram from the sidebar.</p>
-        <div :if={@selected && Map.has_key?(@selected, :error)} class="ex-diag-error">
-          <p><strong>Error loading {@selected.file}:</strong></p>
-          <p>{@selected.error}</p>
-        </div>
-        <div
-          :if={@selected && !Map.has_key?(@selected, :error)}
-          id="ex-diag-mermaid"
-          phx-hook="ExDiagMermaid"
-          phx-update="ignore"
-          data-source={@selected.source}
-        >
-          <pre class="mermaid">{@selected.source}</pre>
-        </div>
-      </main>
+                <pre class="mermaid">{@selected.source}</pre>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+      <div class="drawer-side">
+        <label for="ex-diag-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+        <nav class="ex-diag-sidebar menu bg-base-200 min-h-full w-72 p-4 gap-1">
+          <p :if={@entries == []} class="px-2 text-sm text-base-content/60">
+            No diagrams found in {diagrams_path()}
+          </p>
+          <li :for={{group, group_entries} <- @groups}>
+            <h2 class="menu-title">{group}</h2>
+            <ul>
+              <li :for={entry <- group_entries}>
+                <button
+                  phx-click="select"
+                  phx-value-key={entry.key}
+                  class={entry_class(entry, @selected)}
+                >
+                  <span :if={Map.has_key?(entry, :error)} class="badge badge-error badge-xs"></span>
+                  {entry[:name] || entry.file}
+                </button>
+              </li>
+            </ul>
+          </li>
+        </nav>
+      </div>
     </div>
     """
   end
+
+  defp ex_diag_css, do: @ex_diag_css
 
   defp diagrams_path do
     Application.get_env(:ex_diag, :diagrams_path, Path.join(File.cwd!(), "priv/ex_diag"))
@@ -77,11 +114,13 @@ defmodule ExDiag.DiagramLive do
   end
 
   defp entry_class(entry, selected) do
-    base =
-      if Map.has_key?(entry, :error),
-        do: "ex-diag-entry ex-diag-entry-error",
-        else: "ex-diag-entry"
+    active? = selected && selected.key == entry.key
 
-    if selected && selected.key == entry.key, do: base <> " selected", else: base
+    [
+      Map.has_key?(entry, :error) && "ex-diag-entry-error text-error",
+      active? && "menu-active"
+    ]
+    |> Enum.filter(& &1)
+    |> Enum.join(" ")
   end
 end

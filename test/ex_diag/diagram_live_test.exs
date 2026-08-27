@@ -11,12 +11,14 @@ defmodule ExDiag.DiagramLiveTest do
     assert html =~ "Backend"
     assert html =~ "Auth Flow"
     assert has_element?(view, "button", "Auth Flow")
+    assert has_element?(view, ".drawer-side .menu")
+    assert has_element?(view, "#ex-diag-drawer.drawer-toggle")
   end
 
   test "an error entry renders in the sidebar with its file name" do
     {:ok, view, _html} = live_isolated(build_conn(), ExDiag.DiagramLive)
 
-    assert has_element?(view, ".ex-diag-entry-error")
+    assert has_element?(view, ".ex-diag-entry-error, .badge-error")
   end
 
   test "clicking a diagram name selects it and renders the detail pane" do

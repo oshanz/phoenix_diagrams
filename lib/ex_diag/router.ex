@@ -12,6 +12,16 @@ defmodule ExDiag.Router do
           live_ex_diag "/diagrams", []
         end
       end
+
+  ExDiag ships its own styles (inlined at render time, no host CSS required).
+  Its Mermaid rendering hook ships as a static file and must be registered in
+  your `app.js`:
+
+      import {ExDiagMermaid} from "ex_diag/priv/static/ex_diag/mermaid_hook"
+
+      let liveSocket = new LiveSocket("/live", Socket, {
+        hooks: {...myHooks, ExDiagMermaid}
+      })
   """
 
   @doc """
