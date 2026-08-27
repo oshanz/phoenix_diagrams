@@ -34,7 +34,7 @@ defmodule ExDiag.Components.Layout do
       {Phoenix.HTML.raw("<script>" <> initial_theme_script() <> "</script>")}
       <input id="ex-diag-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex flex-col">
-        <.navbar />
+        <.navbar selected={@selected} />
         <p class="sr-only" role="status">
           {(@selected && (@selected[:name] || @selected.file)) || "No diagram selected"}
         </p>

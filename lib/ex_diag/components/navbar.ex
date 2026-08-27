@@ -3,6 +3,8 @@ defmodule ExDiag.Components.Navbar do
 
   use Phoenix.Component
 
+  attr(:selected, :map, default: nil)
+
   def navbar(assigns) do
     ~H"""
     <div class="navbar bg-base-200">
@@ -23,7 +25,7 @@ defmodule ExDiag.Components.Navbar do
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </label>
-        <span class="ml-2 font-semibold">Diagrams</span>
+        <span class="ml-2 font-semibold">{navbar_title(@selected)}</span>
       </div>
       <div class="flex-none">
         <button
@@ -68,4 +70,7 @@ defmodule ExDiag.Components.Navbar do
     </div>
     """
   end
+
+  defp navbar_title(nil), do: "Diagrams"
+  defp navbar_title(selected), do: selected[:name] || selected.file
 end

@@ -25,43 +25,94 @@ defmodule ExDiag.Components.Detail do
         class="card bg-base-100 shadow-sm border border-base-300"
       >
         <div class="card-body">
-          <div class="flex items-center justify-between gap-2">
-            <h2 class="card-title">{@selected[:name] || @selected.file}</h2>
-            <button
-              id="ex-diag-download"
-              type="button"
-              phx-hook="ExDiagDownload"
-              data-target={"ex-diag-diagram-" <> to_string(@selected.type)}
-              data-filename={download_filename(@selected)}
-              class="btn btn-sm btn-ghost"
-              aria-label="Download diagram as SVG"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
+          <div role="tablist" class="tabs tabs-lift">
+            <input
+              type="radio"
+              name="ex-diag-view-tab"
+              role="tab"
+              class="tab"
+              aria-label="Preview"
+              checked="checked"
+            />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300">
+              <div
+                role="toolbar"
+                aria-label="Preview actions"
+                class="flex items-center gap-1 rounded-t-box border border-base-300 bg-base-200 px-2 py-1"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M7 10l5 5 5-5M12 15V3"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-            id={"ex-diag-diagram-" <> to_string(@selected.type)}
-            phx-hook={diagram_hook(@selected)}
-            phx-update="ignore"
-            role="img"
-            aria-label={"Diagram: " <> (@selected[:name] || @selected.file)}
-            data-source={@selected.source}
-          >
-            <pre class="mermaid">{@selected.source}</pre>
+                <button
+                  id="ex-diag-download"
+                  type="button"
+                  phx-hook="ExDiagDownload"
+                  data-target={"ex-diag-diagram-" <> to_string(@selected.type)}
+                  data-filename={download_filename(@selected)}
+                  class="btn btn-square btn-ghost btn-sm"
+                  aria-label="Download diagram as SVG"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M7 10l5 5 5-5M12 15V3"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                id={"ex-diag-diagram-" <> to_string(@selected.type)}
+                phx-hook={diagram_hook(@selected)}
+                phx-update="ignore"
+                role="img"
+                aria-label={"Diagram: " <> (@selected[:name] || @selected.file)}
+                data-source={@selected.source}
+                class="rounded-b-box border border-t-0 border-base-300 p-4"
+              >
+                <pre class="mermaid">{@selected.source}</pre>
+              </div>
+            </div>
+
+            <input type="radio" name="ex-diag-view-tab" role="tab" class="tab" aria-label="Code" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300">
+              <div
+                role="toolbar"
+                aria-label="Code actions"
+                class="flex items-center gap-1 rounded-t-box border border-base-300 bg-base-200 px-2 py-1"
+              >
+                <button
+                  id="ex-diag-copy"
+                  type="button"
+                  phx-hook="ExDiagCopy"
+                  data-target="ex-diag-code"
+                  class="btn btn-square btn-ghost btn-sm"
+                  aria-label="Copy diagram source"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <pre class="rounded-b-box border border-t-0 border-base-300 bg-base-200 p-4 overflow-auto"><code id="ex-diag-code">{@selected.source}</code></pre>
+            </div>
           </div>
         </div>
       </div>
