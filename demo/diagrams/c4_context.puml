@@ -1,0 +1,24 @@
+@startuml c4-context
+!include <C4/C4_Context>
+
+title Bookstore — System Context
+
+Person(customer, "Customer", "Browses the catalog, places orders")
+Person(staff, "Staff", "Manages inventory and fulfills orders")
+
+System_Boundary(bookstore, "Bookstore Platform") {
+    System(webapp, "Bookstore Web App", "Phoenix / LiveView app: catalog, checkout, order management")
+}
+
+System_Ext(payments, "Payment Gateway", "Authorizes and captures customer payments")
+System_Ext(shipping, "Shipping Provider", "Generates labels and tracks deliveries")
+
+Rel(customer, webapp, "Browses catalog, places orders")
+Rel(staff, webapp, "Manages inventory, fulfills orders")
+
+Rel(webapp, payments, "Authorizes / captures payment")
+Rel(webapp, shipping, "Requests shipping labels")
+
+SHOW_LEGEND()
+
+@enduml
