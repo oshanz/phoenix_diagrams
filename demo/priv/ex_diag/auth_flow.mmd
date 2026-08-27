@@ -1,0 +1,5 @@
+sequenceDiagram
+  User->>API: Login
+  API->>DB: Verify credentials
+  DB-->>API: OK
+  API-->>User: Session token
