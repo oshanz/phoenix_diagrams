@@ -38,6 +38,11 @@ defmodule ExDiag.DiagramLiveTest do
 
     assert has_element?(view, "#ex-diag-diagram-mermaid[phx-hook=ExDiagMermaid]")
     assert html =~ "graph TD"
+
+    assert has_element?(
+             view,
+             "#ex-diag-download[phx-hook=ExDiagDownload][data-target='ex-diag-diagram-mermaid']"
+           )
   end
 
   test "clicking a plantuml diagram name renders the detail pane with the plantuml hook" do
