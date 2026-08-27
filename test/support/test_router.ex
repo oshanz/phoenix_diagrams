@@ -10,5 +10,6 @@ defmodule ExDiag.TestRouter do
   scope "/", TestRouterWeb do
     pipe_through(:browser)
     live_ex_diag("/diagrams", [])
+    live_ex_diag("/diagrams2", [])
   end
 end

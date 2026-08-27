@@ -13,22 +13,11 @@ defmodule ExDiag.Router do
         end
       end
 
-  ExDiag ships its own styles (inlined at render time, no host CSS required).
-  Its Mermaid and PlantUML rendering hooks ship as static files and must be
-  registered in your `app.js`:
-
-      import {ExDiagMermaid, ExDiagTheme} from "ex_diag/priv/static/ex_diag/mermaid_hook"
-      import {ExDiagPlantuml} from "ex_diag/priv/static/ex_diag/plantuml_hook"
-      import {ExDiagDownload} from "ex_diag/priv/static/ex_diag/download_hook"
-
-      let liveSocket = new LiveSocket("/live", Socket, {
-        hooks: {...myHooks, ExDiagMermaid, ExDiagPlantuml, ExDiagTheme, ExDiagDownload}
-      })
-
-  The vendored PlantUML engine's Graphviz layout module falls back to a
-  Node-only code path that references the `url` builtin; add
-  `--external:url` to your `esbuild` args so bundling doesn't fail trying to
-  resolve it (that branch never runs in the browser).
+  ExDiag renders on its own standalone page — it needs no changes to your
+  `app.js`, `assets/`, or esbuild config. Its LiveView client JS, Mermaid
+  and PlantUML rendering hooks are all served and bootstrapped
+  automatically via a dedicated root layout and asset route mounted
+  alongside the LiveView.
   """
 
   @doc """
@@ -38,12 +27,18 @@ defmodule ExDiag.Router do
   configuration.
   """
   defmacro live_ex_diag(path, _opts \\ []) do
-    quote bind_quoted: [path: path] do
+    session_name = :"ex_diag_#{:erlang.phash2(path)}"
+
+    quote bind_quoted: [path: path, session_name: session_name] do
       require Phoenix.LiveView.Router
       alias Phoenix.LiveView.Router, as: LiveRouter
 
       scope path, alias: false do
-        LiveRouter.live("/", ExDiag.DiagramLive, :index)
+        LiveRouter.live_session session_name, root_layout: {ExDiag.RootLayout, :root} do
+          LiveRouter.live("/", ExDiag.DiagramLive, :index)
+        end
+
+        forward("/ex-diag-assets", ExDiag.AssetPlug)
       end
     end
   end

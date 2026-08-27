@@ -33,32 +33,14 @@ defmodule MyAppWeb.Router do
 end
 ```
 
-This mounts `ExDiag.DiagramLive` at `/diagrams`.
+This mounts `ExDiag.DiagramLive` at `/diagrams` — that's it. No changes to
+your `app.js`, `assets/`, or esbuild config, and no npm dependency on
+`mermaid` or `@plantuml/core`. The route renders on its own standalone page
+with its own root layout, which bootstraps its own `LiveSocket` and serves
+its JS (styles are compiled into the library and inlined at render time
+too). See `CLAUDE.md` for how that's wired if you're curious.
 
-### 2. Register the JS hooks
-
-ExDiag ships its rendering hooks as static files vendored in
-`priv/static/ex_diag/`. Import and register them in your app's `app.js`:
-
-```js
-import {ExDiagMermaid, ExDiagTheme} from "ex_diag/priv/static/ex_diag/mermaid_hook"
-import {ExDiagPlantuml} from "ex_diag/priv/static/ex_diag/plantuml_hook"
-import {ExDiagDownload} from "ex_diag/priv/static/ex_diag/download_hook"
-
-let liveSocket = new LiveSocket("/live", Socket, {
-  hooks: {...myHooks, ExDiagMermaid, ExDiagPlantuml, ExDiagTheme, ExDiagDownload}
-})
-```
-
-Styles are compiled into the library and inlined at render time, so no
-changes to your `app.css` are needed.
-
-If you bundle with esbuild, add `--external:url` to your build args — the
-vendored PlantUML engine has a Node-only fallback branch that esbuild
-otherwise tries (and fails) to resolve statically; it never actually runs in
-the browser.
-
-### 3. Add diagram definitions
+### 2. Add diagram definitions
 
 ExDiag scans a directory (`priv/ex_diag` under your app's `cwd` by default,
 configurable via `config :ex_diag, :diagrams_path, "..."`) for `.exs` files.

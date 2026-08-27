@@ -24,15 +24,12 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/demo"
 import topbar from "../vendor/topbar"
-import {ExDiagMermaid, ExDiagTheme} from "../../../priv/static/ex_diag/mermaid_hook"
-import {ExDiagPlantuml} from "../../../priv/static/ex_diag/plantuml_hook"
-import {ExDiagDownload} from "../../../priv/static/ex_diag/download_hook"
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks, ExDiagMermaid, ExDiagPlantuml, ExDiagTheme, ExDiagDownload},
+  hooks: {...colocatedHooks},
 })
 
 // Show progress bar on live navigation and form submits

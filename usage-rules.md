@@ -46,32 +46,33 @@ eval error becomes an inline error entry in the UI instead of crashing the
 host page — it will never take down the whole diagram browser or the host
 app.
 
-### Wiring the JS hooks (required)
+### JS and styling (zero host wiring)
 
-ExDiag's `priv/static/ex_diag/` ships the hook source files, but not their
-`node_modules` (gitignored, not published) — the host app must add `mermaid`
-and `@plantuml/core` as its own npm dependencies so its bundler can resolve
-the bare `import mermaid from "mermaid"` / `import ... from "@plantuml/core"`
-specifiers inside the hooks. Then import and register the two hooks from
-`priv/static/ex_diag/`:
+`live_ex_diag` renders on its own standalone page: `ExDiag.DiagramLive` gets
+its own root layout (`ExDiag.RootLayout`) instead of the host's, with an
+inline `<script type="module">` that constructs and connects its own
+`LiveSocket` — the host's own `app.js`/`LiveSocket` never loads on this page.
+Because of that, the host needs **no changes at all** to `app.js`,
+`assets/`, or its esbuild config, and **no** npm dependency on `mermaid` or
+`@plantuml/core`:
 
-```js
-import ExDiagMermaid from "../../deps/ex_diag/priv/static/ex_diag/mermaid_hook.js"
-import ExDiagPlantuml from "../../deps/ex_diag/priv/static/ex_diag/plantuml_hook.js"
+- The rendering hooks (`ExDiagMermaid`, `ExDiagTheme`, `ExDiagPlantuml`,
+  `ExDiagDownload`) ship pre-bundled in `priv/static/ex_diag/bundle.js` (built
+  via `npm run build:js` in that directory) with `mermaid`/`@plantuml/core`
+  fully inlined — nothing to resolve in the host's own `node_modules`.
+- `phoenix.mjs`/`phoenix_live_view.esm.js` are served straight from
+  `Application.app_dir/2` at request time — i.e. whichever
+  `phoenix`/`phoenix_live_view` version the host app itself resolved, so
+  there's no version-skew risk against a vendored copy.
+- All three files are served by `ExDiag.AssetPlug`, forwarded under
+  `<mount>/ex-diag-assets/*` by the `live_ex_diag` macro alongside the
+  LiveView itself, with a `?v=<hash>` cache-busting fingerprint so a
+  long-lived `cache-control: immutable` header is still safe across
+  `ex_diag` upgrades.
+- Styles are compiled into the library and inlined at render time — the host
+  does not need to add ExDiag's classes to its own Tailwind/daisyUI build or
+  content globs.
 
-let liveSocket = new LiveSocket("/live", Socket, {
-  hooks: { ExDiagMermaid, ExDiagPlantuml, ...otherHooks }
-})
-```
-
-If the host app's esbuild bundles `@plantuml/core`'s TeaVM output, add
-`--external:url` to the esbuild args — its UMD build has an unreachable
-Node-only `require("url")` branch that esbuild otherwise tries to statically
-resolve at build time. This never executes in the browser; it's a bundler
-quirk, not a real runtime dependency.
-
-### Styling
-
-ExDiag inlines its own compiled daisyUI (light/dark) CSS at render time — the
-host app does not need to add ExDiag's classes to its own Tailwind/daisyUI
-build or content globs.
+The websocket path is fixed at `/live`, matching the standard
+`socket("/live", Phoenix.LiveView.Socket)` mount every Phoenix app already
+has — independent of wherever `live_ex_diag` itself is mounted.
