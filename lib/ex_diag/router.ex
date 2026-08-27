@@ -17,11 +17,12 @@ defmodule ExDiag.Router do
   Its Mermaid and PlantUML rendering hooks ship as static files and must be
   registered in your `app.js`:
 
-      import {ExDiagMermaid} from "ex_diag/priv/static/ex_diag/mermaid_hook"
+      import {ExDiagMermaid, ExDiagTheme} from "ex_diag/priv/static/ex_diag/mermaid_hook"
       import {ExDiagPlantuml} from "ex_diag/priv/static/ex_diag/plantuml_hook"
+      import {ExDiagDownload} from "ex_diag/priv/static/ex_diag/download_hook"
 
       let liveSocket = new LiveSocket("/live", Socket, {
-        hooks: {...myHooks, ExDiagMermaid, ExDiagPlantuml}
+        hooks: {...myHooks, ExDiagMermaid, ExDiagPlantuml, ExDiagTheme, ExDiagDownload}
       })
 
   The vendored PlantUML engine's Graphviz layout module falls back to a
