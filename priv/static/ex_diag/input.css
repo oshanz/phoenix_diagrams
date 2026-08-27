@@ -43,3 +43,14 @@
   --depth: 0;
   --noise: 0;
 }
+
+.ex-diag-preview:fullscreen {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-base-100);
+}
+
+.ex-diag-preview:fullscreen > [role="img"] {
+  flex: 1;
+  overflow: auto;
+}

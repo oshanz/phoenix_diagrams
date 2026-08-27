@@ -34,7 +34,11 @@ defmodule ExDiag.Components.Detail do
               aria-label="Preview"
               checked="checked"
             />
-            <div role="tabpanel" class="tab-content bg-base-100 border-base-300">
+            <div
+              id={"ex-diag-preview-" <> to_string(@selected.type)}
+              role="tabpanel"
+              class="ex-diag-preview tab-content bg-base-100 border-base-300"
+            >
               <div
                 role="toolbar"
                 aria-label="Preview actions"
@@ -62,6 +66,47 @@ defmodule ExDiag.Components.Detail do
                       stroke-linejoin="round"
                       stroke-width="2"
                       d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M7 10l5 5 5-5M12 15V3"
+                    />
+                  </svg>
+                </button>
+                <button
+                  id="ex-diag-fullscreen"
+                  type="button"
+                  phx-hook="ExDiagFullscreen"
+                  data-target={"ex-diag-preview-" <> to_string(@selected.type)}
+                  class="btn btn-square btn-ghost btn-sm"
+                  aria-label="View fullscreen"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                    data-icon="expand"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                    />
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 hidden"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                    data-icon="collapse"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 9V5m0 4H5m4 0L4 4m11 5V5m0 4h4m-4 0l5-5M9 15v4m0-4H5m4 0l-5 5m11-5v4m0-4h4m-4 0l5 5"
                     />
                   </svg>
                 </button>

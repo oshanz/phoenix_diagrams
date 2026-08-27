@@ -32,12 +32,12 @@ defmodule ExDiag.RootLayout do
     """
     import {Socket} from "#{base}/ex-diag-assets/phoenix.mjs?v=#{v}";
     import {LiveSocket} from "#{base}/ex-diag-assets/phoenix_live_view.esm.js?v=#{v}";
-    import {ExDiagMermaid, ExDiagTheme, ExDiagPlantuml, ExDiagDownload, ExDiagCopy} from "#{base}/ex-diag-assets/bundle.js?v=#{v}";
+    import {ExDiagMermaid, ExDiagTheme, ExDiagPlantuml, ExDiagDownload, ExDiagCopy, ExDiagFullscreen} from "#{base}/ex-diag-assets/bundle.js?v=#{v}";
 
     const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const liveSocket = new LiveSocket("/live", Socket, {
       params: {_csrf_token: csrfToken},
-      hooks: {ExDiagMermaid, ExDiagTheme, ExDiagPlantuml, ExDiagDownload, ExDiagCopy},
+      hooks: {ExDiagMermaid, ExDiagTheme, ExDiagPlantuml, ExDiagDownload, ExDiagCopy, ExDiagFullscreen},
     });
     liveSocket.connect();
     """
