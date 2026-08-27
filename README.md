@@ -7,8 +7,6 @@ client-side — no host CSS wiring, no Java/PlantUML server required.
 
 ## Installation
 
-Add `ex_diag` to your list of dependencies in `mix.exs`:
-
 ```elixir
 def deps do
   [
@@ -33,18 +31,15 @@ defmodule MyAppWeb.Router do
 end
 ```
 
-This mounts `ExDiag.DiagramLive` at `/diagrams` — that's it. No changes to
-your `app.js`, `assets/`, or esbuild config, and no npm dependency on
-`mermaid` or `@plantuml/core`. The route renders on its own standalone page
-with its own root layout, which bootstraps its own `LiveSocket` and serves
-its JS (styles are compiled into the library and inlined at render time
-too). See `CLAUDE.md` for how that's wired if you're curious.
+This mounts `ExDiag.DiagramLive` at `/diagrams` — no changes to your `app.js`
+or asset pipeline needed. See `usage-rules.md` and `CLAUDE.md` for how that's
+wired.
 
 ### 2. Add diagram definitions
 
-ExDiag scans a directory (`priv/ex_diag` under your app's `cwd` by default,
-configurable via `config :ex_diag, :diagrams_path, "..."`) for `.exs` files.
-Each one evaluates to a keyword list describing one diagram:
+ExDiag scans a directory (`priv/ex_diag` by default, configurable via
+`config :ex_diag, :diagrams_path, "..."`) for `.exs` files, each evaluating
+to a keyword list:
 
 ```elixir
 # priv/ex_diag/backend/overview.exs
@@ -55,33 +50,20 @@ Each one evaluates to a keyword list describing one diagram:
 ]
 ```
 
-`source` points at a `.mmd` (Mermaid) or `.puml` (PlantUML) file — the
-extension determines how it's rendered. Diagrams are grouped in the sidebar
-by their `:group` key. A malformed or unreadable definition shows up as an
-inline error in the browser instead of crashing your app.
+`source` points at a `.mmd` (Mermaid) or `.puml` (PlantUML) file. Diagrams
+are grouped in the sidebar by `:group`. A malformed or unreadable definition
+shows up as an inline error instead of crashing your app.
 
 ## Development
 
-This repository contains the `ex_diag` library itself. `demo/` is a
-separate, full Phoenix application (its own `mix.exs`, deps, and
-Tailwind/esbuild asset pipeline) used to manually exercise the library — it
-is not part of the library and isn't run by `mix test`.
-
-Common commands, run from the repo root:
+This repo is the `ex_diag` library. `demo/` is a separate Phoenix app (its
+own `mix.exs`/deps/asset pipeline) for manually exercising it — not run by
+`mix test`.
 
 ```sh
 mix deps.get              # install deps
-mix test                  # run tests
-mix format                # format code
-mix credo --strict        # lint
 mix precommit             # format + compile (warnings-as-errors) + credo + test
-```
-
-To try the library in a real Phoenix app:
-
-```sh
-cd demo
-mix phx.server
+cd demo && mix phx.server # try it in a real Phoenix app
 ```
 
 See `CLAUDE.md` for architecture notes and known gotchas.

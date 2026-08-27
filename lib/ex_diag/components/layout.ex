@@ -7,8 +7,8 @@ defmodule ExDiag.Components.Layout do
   import ExDiag.Components.Detail
   import ExDiag.Components.Sidebar
 
-  @ex_diag_css Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/app.css") |> File.read!()
-  @external_resource Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/app.css")
+  @ex_diag_css Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/build/app.css") |> File.read!()
+  @external_resource Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/build/app.css")
 
   @initial_theme_script """
   (function () {

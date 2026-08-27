@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build:css": "tailwindcss -i input.css -o app.css --minify",
-    "build:js": "esbuild bundle_entry.js --bundle --format=esm --outfile=bundle.js --minify-whitespace --external:url"
+    "build:css": "tailwindcss -i input.css -o build/app.css --minify",
+    "build:js": "esbuild bundle_entry.js --bundle --format=esm --outfile=build/bundle.js --minify-whitespace --external:url"
   },
   "dependencies": {
     "@plantuml/core": "^1.2026.7",

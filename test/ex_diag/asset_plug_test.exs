@@ -32,7 +32,7 @@ defmodule ExDiag.AssetPlugTest do
     assert conn.status == 200
 
     assert conn.resp_body ==
-             File.read!(Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/bundle.js"))
+             File.read!(Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/build/bundle.js"))
 
     assert get_resp_header(conn, "content-type") == ["text/javascript; charset=utf-8"]
   end

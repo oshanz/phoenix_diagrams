@@ -27,7 +27,7 @@ defmodule ExDiag.AssetPlug do
     [
       Application.app_dir(:phoenix, "priv/static/phoenix.mjs"),
       Application.app_dir(:phoenix_live_view, "priv/static/phoenix_live_view.esm.js"),
-      Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/bundle.js")
+      Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/build/bundle.js")
     ]
     |> Enum.map(&File.read!/1)
     |> then(&:crypto.hash(:sha256, &1))
@@ -45,7 +45,7 @@ defmodule ExDiag.AssetPlug do
   end
 
   def call(%Plug.Conn{path_info: ["bundle.js"]} = conn, _opts) do
-    path = Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/bundle.js")
+    path = Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/build/bundle.js")
     serve_file(conn, path)
   end
 

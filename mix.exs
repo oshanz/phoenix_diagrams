@@ -37,11 +37,8 @@ defmodule ExDiag.MixProject do
         LICENSE
         usage-rules.md
         .formatter.exs
-        priv/static/ex_diag/app.css
-        priv/static/ex_diag/bundle.js
-        priv/static/ex_diag/mermaid_hook.js
-        priv/static/ex_diag/plantuml_hook.js
-        priv/static/ex_diag/download_hook.js
+        priv/static/ex_diag/build/app.css
+        priv/static/ex_diag/build/bundle.js
       )
     ]
   end
