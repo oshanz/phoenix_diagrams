@@ -1,15 +1,56 @@
 defmodule ExDiag.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+  @source_url "https://github.com/oshanz/umlbook"
+
   def project do
     [
       app: :ex_diag,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.20",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      description: description(),
+      package: package(),
+      docs: docs()
+    ]
+  end
+
+  defp description do
+    "Embeds a Mermaid/PlantUML diagram browser LiveView into a host Phoenix application."
+  end
+
+  defp package do
+    [
+      licenses: ["Apache-2.0"],
+      links: %{
+        "GitHub" => @source_url,
+        "Demo app" => "#{@source_url}/tree/main/demo"
+      },
+      files: ~w(
+        lib
+        mix.exs
+        README.md
+        LICENSE
+        usage-rules.md
+        .formatter.exs
+        priv/static/ex_diag/app.css
+        priv/static/ex_diag/mermaid_hook.js
+        priv/static/ex_diag/plantuml_hook.js
+        priv/static/ex_diag/download_hook.js
+      )
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      source_ref: "v#{@version}",
+      source_url: @source_url,
+      extras: ["README.md"]
     ]
   end
 
@@ -26,7 +67,8 @@ defmodule ExDiag.MixProject do
       {:phoenix, "~> 1.8"},
       {:phoenix_live_view, "~> 1.2"},
       {:lazy_html, ">= 0.1.0", only: :test},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.34", only: :dev, runtime: false}
 
       # {:file_system, "~> 1.1"}
     ]
