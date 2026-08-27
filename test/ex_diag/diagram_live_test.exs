@@ -4,9 +4,13 @@ defmodule ExDiag.DiagramLiveTest do
   import Phoenix.ConnTest
 
   @endpoint ExDiag.TestEndpoint
+  @diagrams_path Path.join(__DIR__, "../support/fixtures/ex_diag/live_view")
 
   test "mount renders sidebar with groups and diagram names" do
-    {:ok, view, html} = live_isolated(build_conn(), ExDiag.DiagramLive)
+    {:ok, view, html} =
+      live_isolated(build_conn(), ExDiag.DiagramLive,
+        session: %{"diagrams_path" => @diagrams_path}
+      )
 
     assert html =~ "Backend"
     assert html =~ "Auth Flow"
@@ -16,20 +20,29 @@ defmodule ExDiag.DiagramLiveTest do
   end
 
   test "renders a theme toggle button in the navbar" do
-    {:ok, view, _html} = live_isolated(build_conn(), ExDiag.DiagramLive)
+    {:ok, view, _html} =
+      live_isolated(build_conn(), ExDiag.DiagramLive,
+        session: %{"diagrams_path" => @diagrams_path}
+      )
 
     assert has_element?(view, "#ex-diag-theme-toggle[aria-pressed=false]")
     assert has_element?(view, "#ex-diag-root[phx-hook=ExDiagTheme]")
   end
 
   test "an error entry renders in the sidebar with its file name" do
-    {:ok, view, _html} = live_isolated(build_conn(), ExDiag.DiagramLive)
+    {:ok, view, _html} =
+      live_isolated(build_conn(), ExDiag.DiagramLive,
+        session: %{"diagrams_path" => @diagrams_path}
+      )
 
     assert has_element?(view, ".ex-diag-entry-error, .badge-error")
   end
 
   test "clicking a diagram name selects it and renders the detail pane" do
-    {:ok, view, _html} = live_isolated(build_conn(), ExDiag.DiagramLive)
+    {:ok, view, _html} =
+      live_isolated(build_conn(), ExDiag.DiagramLive,
+        session: %{"diagrams_path" => @diagrams_path}
+      )
 
     html =
       view
@@ -46,7 +59,10 @@ defmodule ExDiag.DiagramLiveTest do
   end
 
   test "clicking a plantuml diagram name renders the detail pane with the plantuml hook" do
-    {:ok, view, _html} = live_isolated(build_conn(), ExDiag.DiagramLive)
+    {:ok, view, _html} =
+      live_isolated(build_conn(), ExDiag.DiagramLive,
+        session: %{"diagrams_path" => @diagrams_path}
+      )
 
     html =
       view
@@ -58,7 +74,10 @@ defmodule ExDiag.DiagramLiveTest do
   end
 
   test "clicking an error entry shows its error message instead of a diagram" do
-    {:ok, view, _html} = live_isolated(build_conn(), ExDiag.DiagramLive)
+    {:ok, view, _html} =
+      live_isolated(build_conn(), ExDiag.DiagramLive,
+        session: %{"diagrams_path" => @diagrams_path}
+      )
 
     html =
       view

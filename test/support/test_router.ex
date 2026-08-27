@@ -7,9 +7,11 @@ defmodule ExDiag.TestRouter do
     plug(:accepts, ["html"])
   end
 
+  @diagrams_path Path.join(__DIR__, "fixtures/ex_diag/live_view")
+
   scope "/", TestRouterWeb do
     pipe_through(:browser)
-    live_ex_diag("/diagrams", [])
-    live_ex_diag("/diagrams2", [])
+    live_ex_diag("/diagrams", diagrams_path: @diagrams_path)
+    live_ex_diag("/diagrams2", diagrams_path: @diagrams_path)
   end
 end

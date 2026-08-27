@@ -4,11 +4,17 @@ defmodule ExDiag.DiagramLive do
   alias ExDiag.Loader
 
   @impl true
-  def mount(_params, _session, socket) do
-    entries = Loader.scan(diagrams_path())
+  def mount(_params, %{"diagrams_path" => diagrams_path}, socket) do
+    entries = Loader.scan(diagrams_path)
     selected = Enum.find(entries, &(!Map.has_key?(&1, :error)))
 
-    {:ok, assign(socket, entries: entries, groups: group_entries(entries), selected: selected)}
+    {:ok,
+     assign(socket,
+       entries: entries,
+       groups: group_entries(entries),
+       selected: selected,
+       diagrams_path: diagrams_path
+     )}
   end
 
   @impl true
@@ -17,10 +23,6 @@ defmodule ExDiag.DiagramLive do
       nil -> {:noreply, socket}
       entry -> {:noreply, assign(socket, :selected, entry)}
     end
-  end
-
-  defp diagrams_path do
-    Application.get_env(:ex_diag, :diagrams_path, Path.join(File.cwd!(), "priv/ex_diag"))
   end
 
   defp group_entries(entries) do

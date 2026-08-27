@@ -11,7 +11,7 @@ import ExDiag.Router
 
 scope "/" do
   pipe_through :browser
-  live_ex_diag "/diagrams", []
+  live_ex_diag "/diagrams", diagrams_path: "priv/diagrams"
 end
 ```
 
@@ -19,11 +19,9 @@ Mounts `ExDiag.DiagramLive` at `GET /diagrams`.
 
 ### Diagram source directory
 
-Defaults to `priv/ex_diag` under the host app's cwd; override with:
-
-```elixir
-config :ex_diag, diagrams_path: "priv/diagrams"
-```
+`:diagrams_path` is required — `live_ex_diag/2` raises `ArgumentError` at
+compile time if it's missing. There is no default and no application config
+fallback.
 
 Each entry is a `.exs` file, `Code.eval_file`'d into a keyword list:
 

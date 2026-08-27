@@ -26,20 +26,19 @@ defmodule MyAppWeb.Router do
 
   scope "/" do
     pipe_through :browser
-    live_ex_diag "/diagrams", []
+    live_ex_diag "/diagrams", diagrams_path: "priv/diagrams"
   end
 end
 ```
 
 This mounts `ExDiag.DiagramLive` at `/diagrams` — no changes to your `app.js`
 or asset pipeline needed. See `usage-rules.md` and `CLAUDE.md` for how that's
-wired.
+wired. `:diagrams_path` is required — there's no default.
 
 ### 2. Add diagram definitions
 
-ExDiag scans a directory (`priv/ex_diag` by default, configurable via
-`config :ex_diag, :diagrams_path, "..."`) for `.exs` files, each evaluating
-to a keyword list:
+ExDiag scans the directory given via `:diagrams_path` for `.exs` files, each
+evaluating to a keyword list:
 
 ```elixir
 # priv/ex_diag/backend/overview.exs
