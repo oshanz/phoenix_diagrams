@@ -20,7 +20,7 @@ defmodule DemoWeb.Router do
 
     get "/", PageController, :home
 
-    live_ex_diag "/diagrams", []
+    live_ex_diag("/diagrams", [])
   end
 
   # Other scopes may use custom stacks.

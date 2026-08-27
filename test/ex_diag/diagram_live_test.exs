@@ -15,6 +15,13 @@ defmodule ExDiag.DiagramLiveTest do
     assert has_element?(view, "#ex-diag-drawer.drawer-toggle")
   end
 
+  test "renders a theme toggle button in the navbar" do
+    {:ok, view, _html} = live_isolated(build_conn(), ExDiag.DiagramLive)
+
+    assert has_element?(view, "#ex-diag-theme-toggle[aria-pressed=false]")
+    assert has_element?(view, "#ex-diag-root[phx-hook=ExDiagTheme]")
+  end
+
   test "an error entry renders in the sidebar with its file name" do
     {:ok, view, _html} = live_isolated(build_conn(), ExDiag.DiagramLive)
 
