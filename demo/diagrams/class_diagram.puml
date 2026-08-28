@@ -1,0 +1,224 @@
+@startuml class-diagram
+title Bookstore — Domain Class Diagram
+
+package "Identity" {
+  abstract class Person {
+    +id: UUID
+    +firstName: String
+    +lastName: String
+    +email: String
+    +fullName(): String
+  }
+  class Customer extends Person {
+    +loyaltyPoints: Integer
+    +addresses: List<Address>
+  }
+  class Staff extends Person {
+    +employeeId: String
+    +role: StaffRole
+  }
+  class Account {
+    +id: UUID
+    +username: String
+    +passwordHash: String
+    +createdAt: DateTime
+  }
+  class Address {
+    +line1: String
+    +city: String
+    +postalCode: String
+    +country: String
+  }
+  enum StaffRole {
+    CLERK
+    MANAGER
+    WAREHOUSE
+  }
+}
+
+package "Catalog" {
+  class Book {
+    +isbn: String
+    +title: String
+    +description: String
+    +publishedAt: Date
+    +priceCents: Integer
+  }
+  class Author {
+    +id: UUID
+    +name: String
+    +bio: String
+  }
+  class Publisher {
+    +id: UUID
+    +name: String
+    +website: String
+  }
+  class Genre {
+    +id: UUID
+    +name: String
+  }
+  class Edition {
+    +id: UUID
+    +format: EditionFormat
+    +pageCount: Integer
+  }
+  class Review {
+    +id: UUID
+    +rating: Integer
+    +body: String
+    +createdAt: DateTime
+  }
+  enum EditionFormat {
+    HARDCOVER
+    PAPERBACK
+    EBOOK
+    AUDIOBOOK
+  }
+}
+
+package "Inventory" {
+  class Warehouse {
+    +id: UUID
+    +name: String
+    +location: Address
+  }
+  class StockItem {
+    +id: UUID
+    +quantity: Integer
+    +reorderThreshold: Integer
+  }
+  class Supplier {
+    +id: UUID
+    +name: String
+    +contactEmail: String
+  }
+  class PurchaseOrder {
+    +id: UUID
+    +status: PurchaseOrderStatus
+    +placedAt: DateTime
+  }
+  enum PurchaseOrderStatus {
+    DRAFT
+    SUBMITTED
+    RECEIVED
+    CANCELLED
+  }
+}
+
+package "Ordering" {
+  class Cart {
+    +id: UUID
+    +createdAt: DateTime
+  }
+  class CartItem {
+    +quantity: Integer
+    +unitPriceCents: Integer
+  }
+  class Order {
+    +id: UUID
+    +status: OrderStatus
+    +placedAt: DateTime
+    +totalCents: Integer
+  }
+  class OrderLine {
+    +quantity: Integer
+    +unitPriceCents: Integer
+  }
+  enum OrderStatus {
+    PENDING
+    PAID
+    SHIPPED
+    DELIVERED
+    CANCELLED
+  }
+}
+
+package "Fulfillment" {
+  class Shipment {
+    +id: UUID
+    +trackingNumber: String
+    +status: ShipmentStatus
+    +shippedAt: DateTime
+  }
+  class Carrier {
+    +id: UUID
+    +name: String
+  }
+  enum ShipmentStatus {
+    PREPARING
+    IN_TRANSIT
+    DELIVERED
+    LOST
+  }
+}
+
+package "Payments" {
+  class Payment {
+    +id: UUID
+    +amountCents: Integer
+    +status: PaymentStatus
+    +processedAt: DateTime
+  }
+  class PaymentMethod {
+    +id: UUID
+    +type: String
+    +last4: String
+  }
+  enum PaymentStatus {
+    PENDING
+    AUTHORIZED
+    CAPTURED
+    FAILED
+  }
+}
+
+package "Engagement" {
+  class Notification {
+    +id: UUID
+    +channel: String
+    +sentAt: DateTime
+  }
+}
+
+' Identity relationships
+Person <|-- Customer
+Person <|-- Staff
+Customer "1" -- "1" Account
+Customer "1" -- "*" Address
+
+' Catalog relationships
+Book "*" -- "*" Author
+Book "*" -- "1" Publisher
+Book "*" -- "*" Genre
+Book "1" -- "*" Edition
+Book "1" -- "*" Review
+Review "*" -- "1" Customer
+
+' Inventory relationships
+Warehouse "1" -- "*" StockItem
+StockItem "*" -- "1" Edition
+Supplier "1" -- "*" PurchaseOrder
+PurchaseOrder "*" -- "1" Edition
+
+' Ordering relationships
+Customer "1" -- "0..1" Cart
+Cart "1" -- "*" CartItem
+CartItem "*" -- "1" Edition
+Customer "1" -- "*" Order
+Order "1" -- "*" OrderLine
+OrderLine "*" -- "1" Edition
+
+' Fulfillment relationships
+Order "1" -- "*" Shipment
+Shipment "*" -- "1" Carrier
+
+' Payments relationships
+Order "1" -- "*" Payment
+Customer "1" -- "*" PaymentMethod
+Payment "*" -- "1" PaymentMethod
+
+' Engagement relationships
+Customer "1" -- "*" Notification
+
+@enduml
