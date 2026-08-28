@@ -1,7 +1,7 @@
 defmodule PhoenixDiagrams.MixProject do
   use Mix.Project
 
-  @version "0.2.1"
+  @version "0.2.2"
   @source_url "https://github.com/oshanz/phoenix_diagrams"
 
   def project do

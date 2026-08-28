@@ -19,7 +19,7 @@ PhoenixDiagrams keeps a searchable catalog of Mermaid and PlantUML diagrams insi
 ```elixir
 def deps do
   [
-    {:phoenix_diagrams, "~> 0.1.0"}
+    {:phoenix_diagrams, "~> 0.2"}
   ]
 end
 ```
