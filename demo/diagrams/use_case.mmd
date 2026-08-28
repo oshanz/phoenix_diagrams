@@ -1,0 +1,30 @@
+flowchart LR
+    Visitor((Visitor))
+    Author((Author))
+    Admin((Admin))
+
+    subgraph Blog["Blog System"]
+        Register[Register account]
+        Login[Log in]
+        Browse[Browse posts]
+        Comment[Comment on post]
+        WritePost[Write post]
+        EditPost[Edit own post]
+        ModerateComments[Moderate comments]
+        ManageUsers[Manage users]
+    end
+
+    Visitor --> Register
+    Visitor --> Login
+    Visitor --> Browse
+    Visitor --> Comment
+
+    Author --> Login
+    Author --> Browse
+    Author --> Comment
+    Author --> WritePost
+    Author --> EditPost
+
+    Admin --> Login
+    Admin --> ModerateComments
+    Admin --> ManageUsers

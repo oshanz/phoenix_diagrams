@@ -1,0 +1,367 @@
+erDiagram
+    USER ||--o| PROFILE : has
+    USER ||--o{ USER_ROLE : has
+    ROLE ||--o{ USER_ROLE : assigned_to
+    ROLE ||--o{ ROLE_PERMISSION : has
+    PERMISSION ||--o{ ROLE_PERMISSION : granted_by
+    USER ||--o{ SESSION : has
+    USER ||--o{ API_KEY : has
+
+    ORGANIZATION ||--o{ ORGANIZATION_MEMBER : has
+    USER ||--o{ ORGANIZATION_MEMBER : belongs_to
+    ORGANIZATION ||--o{ TEAM : has
+    TEAM ||--o{ TEAM_MEMBER : has
+    USER ||--o{ TEAM_MEMBER : belongs_to
+
+    USER ||--o{ POST : writes
+    POST ||--o{ POST_REVISION : has
+    POST ||--o{ COMMENT : has
+    USER ||--o{ COMMENT : writes
+    POST ||--o{ POST_TAG : tagged
+    TAG ||--o{ POST_TAG : used_in
+    POST ||--o{ POST_CATEGORY : categorized
+    CATEGORY ||--o{ POST_CATEGORY : contains
+    POST ||--o{ POST_MEDIA : includes
+    MEDIA_ASSET ||--o{ POST_MEDIA : used_in
+    POST ||--o{ ATTACHMENT : has
+
+    USER ||--o{ LIKE : gives
+    POST ||--o{ LIKE : receives
+    USER ||--o{ BOOKMARK : saves
+    POST ||--o{ BOOKMARK : saved_by
+    USER ||--o{ FOLLOW : follows
+
+    USER ||--o{ NOTIFICATION : receives
+    USER ||--o| NOTIFICATION_PREFERENCE : has
+
+    USER ||--o{ SUBSCRIPTION : has
+    PLAN ||--o{ SUBSCRIPTION : defines
+    SUBSCRIPTION ||--o{ INVOICE : generates
+    INVOICE ||--o{ PAYMENT : paid_by
+    USER ||--o{ PAYMENT_METHOD : has
+    PAYMENT_METHOD ||--o{ PAYMENT : used_for
+
+    ORGANIZATION ||--o{ PRODUCT : sells
+    PRODUCT ||--o{ PRODUCT_VARIANT : has
+    USER ||--o{ ORDER : places
+    ORDER ||--o{ ORDER_ITEM : contains
+    PRODUCT_VARIANT ||--o{ ORDER_ITEM : ordered_as
+    USER ||--o| CART : has
+    CART ||--o{ CART_ITEM : contains
+    PRODUCT_VARIANT ||--o{ CART_ITEM : in_cart
+    ORDER ||--o| DISCOUNT_CODE : applies
+    PRODUCT ||--o{ REVIEW : receives
+    USER ||--o{ REVIEW : writes
+
+    USER ||--o{ SUPPORT_TICKET : opens
+    SUPPORT_TICKET ||--o{ TICKET_MESSAGE : has
+    USER ||--o{ TICKET_MESSAGE : writes
+
+    USER ||--o{ AUDIT_LOG : generates
+
+    ORGANIZATION ||--o{ WEBHOOK : configures
+    WEBHOOK ||--o{ WEBHOOK_DELIVERY : sends
+
+    USER ||--o{ ADDRESS : has
+    ORDER ||--o| ADDRESS : ships_to
+    ORDER ||--o{ SHIPMENT : has
+    SHIPMENT ||--o{ ORDER_ITEM : ships
+
+    WAREHOUSE ||--o{ INVENTORY_ITEM : stocks
+    PRODUCT_VARIANT ||--o{ INVENTORY_ITEM : tracked_as
+
+    USER ||--o{ ANALYTICS_EVENT : triggers
+    POST ||--o{ ANALYTICS_EVENT : tracked_on
+
+    USER {
+        int id PK
+        string email
+        string name
+        datetime inserted_at
+    }
+    PROFILE {
+        int id PK
+        int user_id FK
+        string bio
+        string avatar_url
+    }
+    ROLE {
+        int id PK
+        string name
+    }
+    PERMISSION {
+        int id PK
+        string key
+    }
+    USER_ROLE {
+        int id PK
+        int user_id FK
+        int role_id FK
+    }
+    ROLE_PERMISSION {
+        int id PK
+        int role_id FK
+        int permission_id FK
+    }
+    SESSION {
+        int id PK
+        int user_id FK
+        string token
+        datetime expires_at
+    }
+    API_KEY {
+        int id PK
+        int user_id FK
+        string key_hash
+        datetime revoked_at
+    }
+    ORGANIZATION {
+        int id PK
+        string name
+        string slug
+    }
+    ORGANIZATION_MEMBER {
+        int id PK
+        int organization_id FK
+        int user_id FK
+        string role
+    }
+    TEAM {
+        int id PK
+        int organization_id FK
+        string name
+    }
+    TEAM_MEMBER {
+        int id PK
+        int team_id FK
+        int user_id FK
+    }
+    POST {
+        int id PK
+        int user_id FK
+        string title
+        text body
+        string status
+        datetime published_at
+    }
+    POST_REVISION {
+        int id PK
+        int post_id FK
+        int version
+        text body_snapshot
+    }
+    COMMENT {
+        int id PK
+        int post_id FK
+        int user_id FK
+        text body
+        datetime inserted_at
+    }
+    TAG {
+        int id PK
+        string name
+    }
+    POST_TAG {
+        int id PK
+        int post_id FK
+        int tag_id FK
+    }
+    CATEGORY {
+        int id PK
+        string name
+        int parent_id FK
+    }
+    POST_CATEGORY {
+        int id PK
+        int post_id FK
+        int category_id FK
+    }
+    MEDIA_ASSET {
+        int id PK
+        string url
+        string content_type
+        int size_bytes
+    }
+    POST_MEDIA {
+        int id PK
+        int post_id FK
+        int media_asset_id FK
+    }
+    ATTACHMENT {
+        int id PK
+        int post_id FK
+        string file_url
+    }
+    LIKE {
+        int id PK
+        int user_id FK
+        int post_id FK
+    }
+    BOOKMARK {
+        int id PK
+        int user_id FK
+        int post_id FK
+    }
+    FOLLOW {
+        int id PK
+        int follower_id FK
+        int followee_id FK
+    }
+    NOTIFICATION {
+        int id PK
+        int user_id FK
+        string type
+        boolean read
+        datetime inserted_at
+    }
+    NOTIFICATION_PREFERENCE {
+        int id PK
+        int user_id FK
+        boolean email_enabled
+        boolean push_enabled
+    }
+    SUBSCRIPTION {
+        int id PK
+        int user_id FK
+        int plan_id FK
+        string status
+    }
+    PLAN {
+        int id PK
+        string name
+        decimal price
+    }
+    INVOICE {
+        int id PK
+        int subscription_id FK
+        decimal amount
+        string status
+    }
+    PAYMENT {
+        int id PK
+        int invoice_id FK
+        int payment_method_id FK
+        decimal amount
+        string status
+    }
+    PAYMENT_METHOD {
+        int id PK
+        int user_id FK
+        string brand
+        string last4
+    }
+    PRODUCT {
+        int id PK
+        int organization_id FK
+        string name
+        text description
+    }
+    PRODUCT_VARIANT {
+        int id PK
+        int product_id FK
+        string sku
+        decimal price
+    }
+    ORDER {
+        int id PK
+        int user_id FK
+        int address_id FK
+        int discount_code_id FK
+        string status
+        decimal total
+    }
+    ORDER_ITEM {
+        int id PK
+        int order_id FK
+        int product_variant_id FK
+        int shipment_id FK
+        int quantity
+        decimal unit_price
+    }
+    CART {
+        int id PK
+        int user_id FK
+    }
+    CART_ITEM {
+        int id PK
+        int cart_id FK
+        int product_variant_id FK
+        int quantity
+    }
+    DISCOUNT_CODE {
+        int id PK
+        string code
+        decimal percent_off
+    }
+    REVIEW {
+        int id PK
+        int product_id FK
+        int user_id FK
+        int rating
+        text body
+    }
+    SUPPORT_TICKET {
+        int id PK
+        int user_id FK
+        string subject
+        string status
+    }
+    TICKET_MESSAGE {
+        int id PK
+        int ticket_id FK
+        int user_id FK
+        text body
+        datetime inserted_at
+    }
+    AUDIT_LOG {
+        int id PK
+        int user_id FK
+        string action
+        string entity
+        datetime inserted_at
+    }
+    WEBHOOK {
+        int id PK
+        int organization_id FK
+        string url
+        string event_type
+    }
+    WEBHOOK_DELIVERY {
+        int id PK
+        int webhook_id FK
+        int status_code
+        datetime delivered_at
+    }
+    ADDRESS {
+        int id PK
+        int user_id FK
+        string line1
+        string city
+        string postal_code
+        string country
+    }
+    SHIPMENT {
+        int id PK
+        int order_id FK
+        string carrier
+        string tracking_number
+        string status
+    }
+    WAREHOUSE {
+        int id PK
+        string name
+        string location
+    }
+    INVENTORY_ITEM {
+        int id PK
+        int warehouse_id FK
+        int product_variant_id FK
+        int quantity_on_hand
+    }
+    ANALYTICS_EVENT {
+        int id PK
+        int user_id FK
+        int post_id FK
+        string event_type
+        datetime occurred_at
+    }

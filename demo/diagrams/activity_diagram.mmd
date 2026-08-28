@@ -1,0 +1,62 @@
+flowchart TD
+    Start((Start)) --> SubmitPost[Author submits post]
+    SubmitPost --> Validate{Valid content?}
+
+    Validate -- No --> ShowErrors[Show validation errors]
+    ShowErrors --> SubmitPost
+
+    Validate -- Yes --> SaveDraft[Save as draft]
+    SaveDraft --> RunSpamCheck[Run spam/profanity check]
+    RunSpamCheck --> SpamOk{Passed check?}
+
+    SpamOk -- No --> FlagForReview[Flag for manual review]
+    FlagForReview --> AdminReview{Admin decision}
+    AdminReview -- Reject --> NotifyRejected[Notify author: rejected]
+    NotifyRejected --> End1((End))
+    AdminReview -- Approve --> QueuePublish[Queue for publish]
+
+    SpamOk -- Yes --> RequireApproval{Requires editor approval?}
+    RequireApproval -- No --> QueuePublish
+    RequireApproval -- Yes --> NotifyEditor[Notify editor]
+    NotifyEditor --> EditorReview{Editor decision}
+    EditorReview -- Reject --> NotifyRejected
+    EditorReview -- "Request changes" --> ShowErrors
+    EditorReview -- Approve --> QueuePublish
+
+    QueuePublish --> GenerateSlug[Generate URL slug]
+    GenerateSlug --> SlugCollision{Slug already exists?}
+    SlugCollision -- Yes --> AppendSuffix[Append numeric suffix]
+    AppendSuffix --> GenerateSlug
+    SlugCollision -- No --> PersistPost[Persist post to database]
+
+    PersistPost --> IndexSearch[Index post in search engine]
+    IndexSearch --> InvalidateCache[Invalidate homepage cache]
+    InvalidateCache --> Publish[Publish post]
+
+    Publish --> NotifySubscribers[Notify subscribers]
+    Publish --> PostToSocial[Cross-post to social channels]
+    Publish --> NotifyAuthor[Notify author: published]
+
+    NotifySubscribers --> Join(( ))
+    PostToSocial --> Join
+    NotifyAuthor --> Join
+
+    Join --> LogAnalyticsEvent[Log publish analytics event]
+    LogAnalyticsEvent --> End2((End))
+
+    %% Comment moderation branch, triggered independently after publish
+    Publish --> AwaitComments[Await incoming comments]
+    AwaitComments --> CommentSubmitted{Comment submitted?}
+    CommentSubmitted -- No --> AwaitComments
+    CommentSubmitted -- Yes --> CommentSpamCheck{Comment passes spam check?}
+    CommentSpamCheck -- No --> AutoRejectComment[Auto-reject comment]
+    AutoRejectComment --> AwaitComments
+    CommentSpamCheck -- Yes --> HoldForModeration{Author moderation enabled?}
+    HoldForModeration -- No --> PublishComment[Publish comment immediately]
+    HoldForModeration -- Yes --> NotifyAuthorComment[Notify author of pending comment]
+    NotifyAuthorComment --> AuthorDecision{Author decision}
+    AuthorDecision -- Approve --> PublishComment
+    AuthorDecision -- Reject --> DiscardComment[Discard comment]
+    DiscardComment --> AwaitComments
+    PublishComment --> NotifyCommentSubscribers[Notify thread subscribers]
+    NotifyCommentSubscribers --> AwaitComments

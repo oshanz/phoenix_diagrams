@@ -1,0 +1,130 @@
+sequenceDiagram
+    autonumber
+    actor Author
+    actor Editor
+    participant Web as Web App
+    participant API as Post API
+    participant Auth as Auth Service
+    participant Spam as Spam Checker
+    participant DB as Database
+    participant Queue as Job Queue
+    participant Search as Search Index
+    participant Cache
+    participant CDN
+    participant Social as Social Publisher
+    participant Notif as Notifier
+    participant Metrics as Analytics
+
+    Author->>Web: Click "Publish"
+    Web->>API: POST /posts/:id/publish
+    activate API
+
+    API->>Auth: Validate session token
+    activate Auth
+    alt token invalid or expired
+        Auth-->>API: 401 Unauthorized
+        API-->>Web: 401 Unauthorized
+        Web-->>Author: Redirect to login
+    else token valid
+        Auth-->>API: 200 OK (user_id, role)
+        deactivate Auth
+
+        API->>DB: Fetch post by id
+        activate DB
+        DB-->>API: post record
+        deactivate DB
+
+        alt post not found
+            API-->>Web: 404 Not Found
+            Web-->>Author: Show "post not found"
+        else post found
+            API->>Spam: Check content
+            activate Spam
+            Spam-->>API: score
+            deactivate Spam
+
+            alt spam score too high
+                API->>DB: Mark post flagged
+                API->>Notif: Notify author (async)
+                API-->>Web: 422 Flagged for review
+                Web-->>Author: Show "under review"
+            else content ok
+                opt requires editor approval
+                    API->>Notif: Notify editor (async)
+                    Notif-->>API: queued
+                    API-->>Web: 202 Pending approval
+                    Web-->>Author: Show "awaiting approval"
+
+                    Editor->>Web: Open review queue
+                    Web->>API: GET /posts/:id
+                    API-->>Web: post details
+                    Web-->>Editor: Render review UI
+
+                    Editor->>Web: Approve or reject
+
+                    alt editor rejects
+                        Web->>API: POST /posts/:id/reject
+                        API->>DB: Mark post rejected
+                        API->>Notif: Notify author (async)
+                        API-->>Web: 200 Rejected
+                        Web-->>Editor: Confirm rejection
+                    else editor approves
+                        Web->>API: POST /posts/:id/approve
+                        activate API
+                    end
+                end
+
+                API->>DB: Update status = published, published_at = now
+                activate DB
+                DB-->>API: ack
+                deactivate DB
+
+                par index for search
+                    API->>Search: Index post
+                    activate Search
+                    Search-->>API: ack
+                    deactivate Search
+                and invalidate caches
+                    API->>Cache: Invalidate homepage cache
+                    activate Cache
+                    Cache-->>API: ack
+                    deactivate Cache
+                    API->>CDN: Purge cached page
+                    activate CDN
+                    CDN-->>API: ack
+                    deactivate CDN
+                and queue background jobs
+                    API->>Queue: Enqueue post-publish jobs
+                    activate Queue
+                    Queue-->>API: job ids
+                    deactivate Queue
+                end
+
+                API-->>Web: 200 Published
+                Web-->>Author: Show success
+
+                loop for each job in queue
+                    Queue->>Notif: Dispatch subscriber notification
+                    activate Notif
+                    Notif-->>Queue: sent
+                    deactivate Notif
+
+                    Queue->>Social: Cross-post to social channel
+                    activate Social
+                    alt social API failure
+                        Social-->>Queue: error
+                        Queue->>Queue: schedule retry with backoff
+                    else success
+                        Social-->>Queue: posted
+                    end
+                    deactivate Social
+                end
+
+                Queue->>Metrics: Log publish event
+                activate Metrics
+                Metrics-->>Queue: ack
+                deactivate Metrics
+            end
+        end
+    end
+    deactivate API
