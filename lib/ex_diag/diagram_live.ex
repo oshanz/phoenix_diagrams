@@ -8,6 +8,8 @@ defmodule ExDiag.DiagramLive do
     entries = Loader.scan(diagrams_path)
     selected = Enum.find(entries, &(!Map.has_key?(&1, :error)))
 
+    if connected?(socket), do: watch(diagrams_path)
+
     {:ok,
      assign(socket,
        entries: entries,
@@ -23,6 +25,34 @@ defmodule ExDiag.DiagramLive do
       nil -> {:noreply, socket}
       entry -> {:noreply, assign(socket, :selected, entry)}
     end
+  end
+
+  @impl true
+  def handle_info({:file_event, _watcher_pid, {_path, _events}}, socket) do
+    entries = Loader.scan(socket.assigns.diagrams_path)
+    previous_key = socket.assigns.selected && socket.assigns.selected.key
+
+    selected =
+      Enum.find(entries, &(&1.key == previous_key)) ||
+        Enum.find(entries, &(!Map.has_key?(&1, :error)))
+
+    {:noreply,
+     assign(socket, entries: entries, groups: group_entries(entries), selected: selected)}
+  end
+
+  def handle_info({:file_event, _watcher_pid, :stop}, socket), do: {:noreply, socket}
+
+  # Dev-only live reload: `:file_system` is a `only: :dev` dependency, so it
+  # (and this watcher) is compiled out of any release build entirely.
+  if Code.ensure_loaded?(FileSystem) do
+    defp watch(diagrams_path) do
+      case FileSystem.start_link(dirs: [Path.expand(diagrams_path)]) do
+        {:ok, pid} -> FileSystem.subscribe(pid)
+        {:error, _reason} -> :ok
+      end
+    end
+  else
+    defp watch(_diagrams_path), do: :ok
   end
 
   defp group_entries(entries) do

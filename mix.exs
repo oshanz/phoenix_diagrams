@@ -66,9 +66,8 @@ defmodule ExDiag.MixProject do
       {:phoenix_live_view, "~> 1.2"},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.34", only: :dev, runtime: false}
-
-      # {:file_system, "~> 1.1"}
+      {:ex_doc, "~> 0.34", only: :dev, runtime: false},
+      {:file_system, "~> 1.1", only: [:dev, :test]}
     ]
   end
 
