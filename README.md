@@ -1,20 +1,20 @@
 # PhoenixDiagrams
 
-My diagrams were scattered across stale Confluence pages, Notion docs, and Slack threads — none of them matching what the code actually did. So I started using AI agents to generate diagrams straight from the codebase and deployed them somewhere my non-technical teammates could actually find: right inside the app itself, and version-controlled as part of the development flow (trunk-based/gitflow).
+My diagrams were scattered across old Confluence pages, Notion docs, and Slack threads, and none of them matched what the code actually did. So I started using AI agents to generate diagrams straight from the codebase, and deployed them somewhere my non-technical teammates could actually find: inside the app itself, version-controlled as part of the development flow (trunk-based or gitflow).
 
-PhoenixDiagrams gives your diagrams a home — a slick, searchable catalog embedded in your Phoenix app. Point it at a folder, and watch your Mermaid and PlantUML diagrams come to life, always reflecting the latest state of the system.
+PhoenixDiagrams keeps a searchable catalog of Mermaid and PlantUML diagrams inside your Phoenix application. Point it at a directory, and it shows your diagrams in a sidebar and detail view, always in sync with the source files and versioned with the rest of the codebase.
 
 ![PhoenixDiagrams screenshot](docs/screenshot.png)
 
-## Why you'll like it
+## Features
 
-- 🎨 **Mermaid + PlantUML, rendered client-side** — no Java, no PlantUML server, no headaches
-- 🔍 **Pan and zoom** into every diagram
-- 📋 **Copy source** to clipboard in one click
-- 🖼️ **Download** any diagram as an image
-- 🔄 **Live reload in dev** — save a diagram file, see it update instantly
+- Mermaid and PlantUML rendering, done client-side, so no Java and no PlantUML server needed
+- Pan and zoom on each diagram
+- Copy the diagram source to clipboard
+- Download a diagram as an image
+- Live reload in development: save a diagram file and see the change right away
 
-## Get started in 60 seconds
+## Installation
 
 ```elixir
 def deps do
@@ -24,7 +24,7 @@ def deps do
 end
 ```
 
-### 1. Mount it
+### 1. Mount the router
 
 ```elixir
 defmodule MyAppWeb.Router do
@@ -38,11 +38,11 @@ defmodule MyAppWeb.Router do
 end
 ```
 
-That's it — `PhoenixDiagrams.DiagramLive` is now live at `/diagrams`. (`:diagrams_path` is required — there's no default.)
+This mounts `PhoenixDiagrams.DiagramLive` at `/diagrams`. `:diagrams_path` is required — there is no default.
 
-### 2. Give it something to show
+### 2. Add a diagram
 
-Drop a `.exs` file next to your diagram source, and PhoenixDiagrams takes it from there:
+Place a `.exs` file next to the diagram source:
 
 ```elixir
 # priv/phoenix_diagrams/backend/overview.exs
@@ -53,16 +53,16 @@ Drop a `.exs` file next to your diagram source, and PhoenixDiagrams takes it fro
 ]
 ```
 
-`source` points to a `.mmd` (Mermaid) or `.puml` (PlantUML) file. Add as many `.exs` files as you want, group them however makes sense, and they'll show up in the sidebar — no build step, no config sync, no fuss.
+`source` points to a `.mmd` (Mermaid) or `.puml` (PlantUML) file. Add as many `.exs` files as you like — they'll show up in the sidebar, grouped by `group`.
 
-## Hacking on it
+## Development
 
 ```sh
-mix deps.get              # install deps
-mix precommit             # format + compile (warnings-as-errors) + credo + test
-cd demo && mix phx.server  # kick the tires in a real Phoenix app
+mix deps.get              # install dependencies
+mix precommit             # format, compile (warnings as errors), credo, test
+cd demo && mix phx.server  # run the demo app
 ```
 
-## How to contribute
+## Contributing
 
-Found a bug or have an idea? PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full rundown on setup, testing, and what we look for in a pull request.
+Found a bug or have an idea? See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, testing, and what to expect from a pull request.
