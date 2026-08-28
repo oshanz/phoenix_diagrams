@@ -37,8 +37,9 @@ defmodule ExDiag.Components.Detail do
             <div
               id={"ex-diag-preview-" <> to_string(@selected.type)}
               role="tabpanel"
-              class="ex-diag-preview tab-content bg-base-100 border-base-300 overflow-auto"
+              class="ex-diag-preview tab-content bg-base-100 border-base-300 overflow-auto cursor-grab"
             >
+              <%!-- ExDiagZoom toggles this container between cursor-grab and cursor-grabbing while panning --%>
               <div
                 role="toolbar"
                 aria-label="Preview actions"

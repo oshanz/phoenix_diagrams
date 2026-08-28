@@ -22,9 +22,53 @@ export const ExDiagZoom = {
       }
     };
     this.el.addEventListener("click", this.onClick);
+
+    this.container = document.getElementById(this.el.dataset.target)?.parentElement;
+    if (this.container) {
+      this.dragging = false;
+      this.container.classList.add("cursor-grab");
+
+      this.onMouseDown = (event) => {
+        if (event.button !== 0 || event.target.closest("[data-zoom-action]")) return;
+
+        this.dragging = true;
+        this.dragStartX = event.clientX;
+        this.dragStartY = event.clientY;
+        this.scrollStartLeft = this.container.scrollLeft;
+        this.scrollStartTop = this.container.scrollTop;
+        this.container.classList.remove("cursor-grab");
+        this.container.classList.add("cursor-grabbing");
+        event.preventDefault();
+      };
+      this.onMouseMove = (event) => {
+        if (!this.dragging) return;
+
+        this.container.scrollLeft = this.scrollStartLeft - (event.clientX - this.dragStartX);
+        this.container.scrollTop = this.scrollStartTop - (event.clientY - this.dragStartY);
+      };
+      this.onMouseUp = () => {
+        if (!this.dragging) return;
+
+        this.dragging = false;
+        this.container.classList.remove("cursor-grabbing");
+        this.container.classList.add("cursor-grab");
+      };
+
+      this.container.addEventListener("mousedown", this.onMouseDown);
+      this.container.addEventListener("mousemove", this.onMouseMove);
+      this.container.addEventListener("mouseup", this.onMouseUp);
+      this.container.addEventListener("mouseleave", this.onMouseUp);
+    }
   },
   destroyed() {
     this.el.removeEventListener("click", this.onClick);
+
+    if (this.container) {
+      this.container.removeEventListener("mousedown", this.onMouseDown);
+      this.container.removeEventListener("mousemove", this.onMouseMove);
+      this.container.removeEventListener("mouseup", this.onMouseUp);
+      this.container.removeEventListener("mouseleave", this.onMouseUp);
+    }
   },
   setScale(scale) {
     this.scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
