@@ -5,6 +5,8 @@ collects them into a simple catalog view inside your Phoenix app. You
 just point it to a directory of diagram definitions, and it does the rest.
 Everything is rendered on the client side.
 
+![PhoenixDiagrams screenshot](docs/screenshot.png)
+
 ## Features
 
 - [x] Mermaid diagram rendering
