@@ -49,6 +49,7 @@ defmodule PhoenixDiagrams.DiagramLive do
       case FileSystem.start_link(dirs: [Path.expand(diagrams_path)]) do
         {:ok, pid} -> FileSystem.subscribe(pid)
         {:error, _reason} -> :ok
+        :ignore -> :ok
       end
     end
   else
