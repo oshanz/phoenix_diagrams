@@ -60,7 +60,7 @@ Place a `.exs` file next to the diagram source:
 
 `source` points to a `.mmd` (Mermaid) or `.puml` (PlantUML) file. Add as many `.exs` files as you like — they'll show up in the sidebar, grouped by `group`.
 
-For more examples, see the [`demo/`](demo) app — a full Phoenix app with sample `.exs`/`.mmd`/`.puml` diagram definitions you can run locally with `cd demo && mix phx.server`.
+For more examples, see the [`demo/`](https://github.com/oshanz/phoenix_diagrams/tree/main/demo) app — a full Phoenix app with sample `.exs`/`.mmd`/`.puml` diagram definitions you can run locally with `cd demo && mix phx.server`.
 
 ## Development
 
@@ -72,4 +72,4 @@ cd demo && mix phx.server  # run the demo app
 
 ## Contributing
 
-Found a bug or have an idea? See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, testing, and what to expect from a pull request.
+Found a bug or have an idea? See [CONTRIBUTING.md](https://github.com/oshanz/phoenix_diagrams/blob/main/CONTRIBUTING.md) for setup, testing, and what to expect from a pull request.
