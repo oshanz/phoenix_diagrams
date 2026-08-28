@@ -37,7 +37,7 @@ defmodule ExDiag.Components.Detail do
             <div
               id={"ex-diag-preview-" <> to_string(@selected.type)}
               role="tabpanel"
-              class="ex-diag-preview tab-content bg-base-100 border-base-300"
+              class="ex-diag-preview tab-content bg-base-100 border-base-300 overflow-auto"
             >
               <div
                 role="toolbar"
@@ -69,6 +69,81 @@ defmodule ExDiag.Components.Detail do
                     />
                   </svg>
                 </button>
+                <div
+                  id="ex-diag-zoom"
+                  phx-hook="ExDiagZoom"
+                  data-target={"ex-diag-diagram-" <> to_string(@selected.type)}
+                  role="group"
+                  aria-label="Zoom controls"
+                  class="flex items-center gap-1"
+                >
+                  <button
+                    type="button"
+                    data-zoom-action="out"
+                    class="btn btn-square btn-ghost btn-sm"
+                    aria-label="Zoom out"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-4.35-4.35M11 8v0M8 11h6M17 11A6 6 0 105 11a6 6 0 0012 0z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    data-zoom-action="reset"
+                    class="btn btn-square btn-ghost btn-sm"
+                    aria-label="Reset zoom"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 4v5h5M20 20v-5h-5M4 9a8 8 0 0113.66-4.66M20 15a8 8 0 01-13.66 4.66"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    data-zoom-action="in"
+                    class="btn btn-square btn-ghost btn-sm"
+                    aria-label="Zoom in"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-4.35-4.35M11 8v6M8 11h6M17 11A6 6 0 105 11a6 6 0 0012 0z"
+                      />
+                    </svg>
+                  </button>
+                </div>
                 <button
                   id="ex-diag-fullscreen"
                   type="button"
