@@ -1,8 +1,8 @@
-defmodule ExDiag.TestEndpoint do
+defmodule PhoenixDiagrams.TestEndpoint do
   @moduledoc false
-  use Phoenix.Endpoint, otp_app: :ex_diag
+  use Phoenix.Endpoint, otp_app: :phoenix_diagrams
 
   socket("/live", Phoenix.LiveView.Socket)
 
-  plug(ExDiag.TestRouter)
+  plug(PhoenixDiagrams.TestRouter)
 end

@@ -1,4 +1,4 @@
-defmodule ExDiag.RootLayout do
+defmodule PhoenixDiagrams.RootLayout do
   @moduledoc false
 
   use Phoenix.Component
@@ -27,17 +27,17 @@ defmodule ExDiag.RootLayout do
 
   defp bootstrap_script(conn) do
     base = String.trim_trailing(conn.request_path, "/")
-    v = ExDiag.AssetPlug.asset_version()
+    v = PhoenixDiagrams.AssetPlug.asset_version()
 
     """
-    import {Socket} from "#{base}/ex-diag-assets/phoenix.mjs?v=#{v}";
-    import {LiveSocket} from "#{base}/ex-diag-assets/phoenix_live_view.esm.js?v=#{v}";
-    import {ExDiagMermaid, ExDiagTheme, ExDiagPlantuml, ExDiagDownload, ExDiagCopy, ExDiagFullscreen, ExDiagZoom} from "#{base}/ex-diag-assets/bundle.js?v=#{v}";
+    import {Socket} from "#{base}/phoenix-diagrams-assets/phoenix.mjs?v=#{v}";
+    import {LiveSocket} from "#{base}/phoenix-diagrams-assets/phoenix_live_view.esm.js?v=#{v}";
+    import {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom} from "#{base}/phoenix-diagrams-assets/bundle.js?v=#{v}";
 
     const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const liveSocket = new LiveSocket("/live", Socket, {
       params: {_csrf_token: csrfToken},
-      hooks: {ExDiagMermaid, ExDiagTheme, ExDiagPlantuml, ExDiagDownload, ExDiagCopy, ExDiagFullscreen, ExDiagZoom},
+      hooks: {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom},
     });
     liveSocket.connect();
     """

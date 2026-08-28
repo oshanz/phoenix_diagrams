@@ -1,9 +1,9 @@
-defmodule ExDiag.LoaderTest do
+defmodule PhoenixDiagrams.LoaderTest do
   use ExUnit.Case, async: true
 
-  alias ExDiag.Loader
+  alias PhoenixDiagrams.Loader
 
-  @fixtures Path.join(__DIR__, "../support/fixtures/ex_diag")
+  @fixtures Path.join(__DIR__, "../support/fixtures/phoenix_diagrams")
 
   test "loads a valid diagram entry" do
     [entry] = Loader.scan(Path.join(@fixtures, "valid"))

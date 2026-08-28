@@ -1,7 +1,7 @@
 import mermaid from "mermaid";
 
-const THEME_STORAGE_KEY = "ex_diag_theme";
-const THEME_CHANGED_EVENT = "ex-diag-theme-changed";
+const THEME_STORAGE_KEY = "phoenix_diagrams_theme";
+const THEME_CHANGED_EVENT = "phoenix-diagrams-theme-changed";
 
 function readStoredTheme() {
   try {
@@ -57,7 +57,7 @@ function currentTheme(root) {
 }
 
 function loadingMarkup() {
-  return `<div class="ex-diag-loading flex items-center justify-center gap-2 p-8 text-base-content/60" role="status">
+  return `<div class="phoenix-diagrams-loading flex items-center justify-center gap-2 p-8 text-base-content/60" role="status">
     <span class="loading loading-spinner loading-sm" aria-hidden="true"></span>
     <span>Rendering diagram…</span>
   </div>`;
@@ -77,9 +77,9 @@ function resolveTheme() {
 
 mermaid.initialize({ startOnLoad: false });
 
-export const ExDiagMermaid = {
+export const PhoenixDiagramsMermaid = {
   mounted() {
-    this.root = this.el.closest(".ex-diag-root");
+    this.root = this.el.closest(".phoenix-diagrams-root");
     this.renderQueue = Promise.resolve();
     this.onThemeChanged = () => this.render();
     this.root?.addEventListener(THEME_CHANGED_EVENT, this.onThemeChanged);
@@ -117,7 +117,7 @@ export const ExDiagMermaid = {
               }
             : { startOnLoad: false, theme: "default" },
         );
-        return mermaid.render(`ex-diag-${this.el.id}-svg`, source);
+        return mermaid.render(`phoenix-diagrams-${this.el.id}-svg`, source);
       })
       .then(({ svg }) => {
         this.el.innerHTML = svg;
@@ -129,11 +129,11 @@ export const ExDiagMermaid = {
 // attributes back to whatever the server last rendered, which never includes
 // data-theme (it's client-only state). Reapplying it in updated() - which fires
 // after every such patch - keeps the chosen theme from getting silently reset.
-export const ExDiagTheme = {
+export const PhoenixDiagramsTheme = {
   mounted() {
     this.applyTheme(resolveTheme());
     this.onClick = (event) => {
-      if (!event.target.closest("#ex-diag-theme-toggle")) return;
+      if (!event.target.closest("#phoenix-diagrams-theme-toggle")) return;
       const next = currentTheme(this.el) === "dark" ? "light" : "dark";
       writeStoredTheme(next);
       this.applyTheme(next);
@@ -149,10 +149,10 @@ export const ExDiagTheme = {
   applyTheme(theme) {
     this.el.dataset.theme = theme;
 
-    const toggle = this.el.querySelector("#ex-diag-theme-toggle");
+    const toggle = this.el.querySelector("#phoenix-diagrams-theme-toggle");
     toggle?.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
-    toggle?.querySelector(".ex-diag-theme-icon-light")?.classList.toggle("hidden", theme === "dark");
-    toggle?.querySelector(".ex-diag-theme-icon-dark")?.classList.toggle("hidden", theme !== "dark");
+    toggle?.querySelector(".phoenix-diagrams-theme-icon-light")?.classList.toggle("hidden", theme === "dark");
+    toggle?.querySelector(".phoenix-diagrams-theme-icon-dark")?.classList.toggle("hidden", theme !== "dark");
 
     this.el.dispatchEvent(new CustomEvent(THEME_CHANGED_EVENT, { detail: { theme } }));
   },

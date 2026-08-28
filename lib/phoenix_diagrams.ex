@@ -1,6 +1,6 @@
-defmodule ExDiag do
+defmodule PhoenixDiagrams do
   @moduledoc """
-  Documentation for `ExDiag`.
+  Documentation for `PhoenixDiagrams`.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule ExDiag do
 
   ## Examples
 
-      iex> ExDiag.hello()
+      iex> PhoenixDiagrams.hello()
       :world
 
   """

@@ -2,7 +2,7 @@ const MIN_SCALE = 0.25;
 const MAX_SCALE = 3;
 const SCALE_STEP = 1.2;
 
-export const ExDiagZoom = {
+export const PhoenixDiagramsZoom = {
   mounted() {
     this.scale = 1;
     this.dragging = false;

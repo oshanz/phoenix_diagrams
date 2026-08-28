@@ -1,6 +1,6 @@
 defmodule DemoWeb.Router do
   use DemoWeb, :router
-  import ExDiag.Router
+  import PhoenixDiagrams.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -20,7 +20,7 @@ defmodule DemoWeb.Router do
 
     get "/", PageController, :home
 
-    live_ex_diag("/diagrams", diagrams_path:  "diagrams/")
+    live_phoenix_diagrams("/diagrams", diagrams_path:  "diagrams/")
   end
 
   # Other scopes may use custom stacks.

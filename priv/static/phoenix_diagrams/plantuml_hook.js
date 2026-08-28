@@ -19,7 +19,7 @@ function currentTheme(root) {
 }
 
 function loadingMarkup() {
-  return `<div class="ex-diag-loading flex items-center justify-center gap-2 p-8 text-base-content/60" role="status">
+  return `<div class="phoenix-diagrams-loading flex items-center justify-center gap-2 p-8 text-base-content/60" role="status">
     <span class="loading loading-spinner loading-sm" aria-hidden="true"></span>
     <span>Rendering diagram…</span>
   </div>`;
@@ -29,21 +29,21 @@ function waitForPaint() {
   return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 }
 
-export const ExDiagPlantuml = {
+export const PhoenixDiagramsPlantuml = {
   mounted() {
-    this.root = this.el.closest(".ex-diag-root");
+    this.root = this.el.closest(".phoenix-diagrams-root");
     this.renderQueue = Promise.resolve();
     this.onThemeChanged = () => this.render();
-    this.root?.addEventListener("ex-diag-theme-changed", this.onThemeChanged);
+    this.root?.addEventListener("phoenix-diagrams-theme-changed", this.onThemeChanged);
     this.render();
   },
   updated() {
     this.render();
   },
   destroyed() {
-    this.root?.removeEventListener("ex-diag-theme-changed", this.onThemeChanged);
+    this.root?.removeEventListener("phoenix-diagrams-theme-changed", this.onThemeChanged);
   },
-  // See ExDiagMermaid.render in mermaid_hook.js: mounted()/updated() can both
+  // See PhoenixDiagramsMermaid.render in mermaid_hook.js: mounted()/updated() can both
   // fire within the same LiveView patch, and the engine shares internal state
   // across renders, so renders are queued to run one at a time.
   render() {

@@ -1,4 +1,4 @@
-defmodule ExDiag.Loader do
+defmodule PhoenixDiagrams.Loader do
   @moduledoc """
   Scans a directory of `.exs` diagram metadata files and reads each
   one's referenced `.mmd` source into a list of entry maps.

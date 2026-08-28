@@ -1,4 +1,4 @@
-export const ExDiagCopy = {
+export const PhoenixDiagramsCopy = {
   mounted() {
     this.onClick = () => this.copy();
     this.el.addEventListener("click", this.onClick);

@@ -1,21 +1,28 @@
-defmodule ExDiag.Components.Layout do
+defmodule PhoenixDiagrams.Components.Layout do
   @moduledoc false
 
   use Phoenix.Component
 
-  import ExDiag.Components.Navbar
-  import ExDiag.Components.Detail
-  import ExDiag.Components.Sidebar
+  import PhoenixDiagrams.Components.Navbar
+  import PhoenixDiagrams.Components.Detail
+  import PhoenixDiagrams.Components.Sidebar
 
-  @ex_diag_css Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/build/app.css") |> File.read!()
-  @external_resource Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/build/app.css")
+  @phoenix_diagrams_css Path.join(
+                          :code.priv_dir(:phoenix_diagrams),
+                          "static/phoenix_diagrams/build/app.css"
+                        )
+                        |> File.read!()
+  @external_resource Path.join(
+                       :code.priv_dir(:phoenix_diagrams),
+                       "static/phoenix_diagrams/build/app.css"
+                     )
 
   @initial_theme_script """
   (function () {
     var root = document.currentScript.parentElement;
     var stored = null;
     try {
-      stored = window.localStorage.getItem("ex_diag_theme");
+      stored = window.localStorage.getItem("phoenix_diagrams_theme");
     } catch (e) {}
     var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
     root.dataset.theme = stored || (prefersDark ? "dark" : "light");
@@ -29,10 +36,10 @@ defmodule ExDiag.Components.Layout do
 
   def layout(assigns) do
     ~H"""
-    {Phoenix.HTML.raw("<style>" <> ex_diag_css() <> "</style>")}
-    <div id="ex-diag-root" phx-hook="ExDiagTheme" class="ex-diag-root drawer lg:drawer-open">
+    {Phoenix.HTML.raw("<style>" <> phoenix_diagrams_css() <> "</style>")}
+    <div id="phoenix-diagrams-root" phx-hook="PhoenixDiagramsTheme" class="phoenix-diagrams-root drawer lg:drawer-open">
       {Phoenix.HTML.raw("<script>" <> initial_theme_script() <> "</script>")}
-      <input id="ex-diag-drawer" type="checkbox" class="drawer-toggle" />
+      <input id="phoenix-diagrams-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex flex-col">
         <.navbar selected={@selected} />
         <p class="sr-only" role="status">
@@ -45,6 +52,6 @@ defmodule ExDiag.Components.Layout do
     """
   end
 
-  defp ex_diag_css, do: @ex_diag_css
+  defp phoenix_diagrams_css, do: @phoenix_diagrams_css
   defp initial_theme_script, do: @initial_theme_script
 end

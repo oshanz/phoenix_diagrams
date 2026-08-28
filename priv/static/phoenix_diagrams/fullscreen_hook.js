@@ -1,4 +1,4 @@
-export const ExDiagFullscreen = {
+export const PhoenixDiagramsFullscreen = {
   mounted() {
     this.onClick = () => this.toggle();
     this.onFullscreenChange = () => this.syncIcon();

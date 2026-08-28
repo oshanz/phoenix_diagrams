@@ -20,7 +20,7 @@ erl_crash.dump
 *.ez
 
 # Ignore package tarball (built via "mix hex.build").
-ex_diag-*.tar
+phoenix_diagrams-*.tar
 
 # npm dependency used only to resolve the mermaid.js import for local dev/demo builds.
 node_modules/

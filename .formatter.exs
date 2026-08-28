@@ -4,7 +4,7 @@
     "{mix,.formatter}.exs",
     "{config,lib}/**/*.{ex,exs}",
     "test/*.exs",
-    "test/ex_diag/**/*.{ex,exs}",
+    "test/phoenix_diagrams/**/*.{ex,exs}",
     "test/support/*.ex"
   ]
 ]

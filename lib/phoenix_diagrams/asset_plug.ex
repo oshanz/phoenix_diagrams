@@ -1,4 +1,4 @@
-defmodule ExDiag.AssetPlug do
+defmodule PhoenixDiagrams.AssetPlug do
   @moduledoc false
 
   import Plug.Conn
@@ -27,7 +27,7 @@ defmodule ExDiag.AssetPlug do
     [
       Application.app_dir(:phoenix, "priv/static/phoenix.mjs"),
       Application.app_dir(:phoenix_live_view, "priv/static/phoenix_live_view.esm.js"),
-      Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/build/bundle.js")
+      Path.join(:code.priv_dir(:phoenix_diagrams), "static/phoenix_diagrams/build/bundle.js")
     ]
     |> Enum.map(&File.read!/1)
     |> then(&:crypto.hash(:sha256, &1))
@@ -45,7 +45,7 @@ defmodule ExDiag.AssetPlug do
   end
 
   def call(%Plug.Conn{path_info: ["bundle.js"]} = conn, _opts) do
-    path = Path.join(:code.priv_dir(:ex_diag), "static/ex_diag/build/bundle.js")
+    path = Path.join(:code.priv_dir(:phoenix_diagrams), "static/phoenix_diagrams/build/bundle.js")
     serve_file(conn, path)
   end
 
@@ -57,7 +57,7 @@ defmodule ExDiag.AssetPlug do
     path = Application.app_dir(app, relative_path)
     serve_file(conn, path)
   rescue
-    _ -> send_resp(conn, 500, "ExDiag asset unavailable")
+    _ -> send_resp(conn, 500, "PhoenixDiagrams asset unavailable")
   end
 
   defp serve_file(conn, path) do
@@ -67,6 +67,6 @@ defmodule ExDiag.AssetPlug do
     |> put_resp_header("cache-control", @cache_control)
     |> send_resp(200, File.read!(path))
   rescue
-    _ -> send_resp(conn, 500, "ExDiag asset unavailable")
+    _ -> send_resp(conn, 500, "PhoenixDiagrams asset unavailable")
   end
 end

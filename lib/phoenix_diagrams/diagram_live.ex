@@ -1,7 +1,7 @@
-defmodule ExDiag.DiagramLive do
+defmodule PhoenixDiagrams.DiagramLive do
   use Phoenix.LiveView
 
-  alias ExDiag.Loader
+  alias PhoenixDiagrams.Loader
 
   @impl true
   def mount(_params, %{"diagrams_path" => diagrams_path}, socket) do

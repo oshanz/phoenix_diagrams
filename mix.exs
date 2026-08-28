@@ -1,4 +1,4 @@
-defmodule ExDiag.MixProject do
+defmodule PhoenixDiagrams.MixProject do
   use Mix.Project
 
   @version "0.1.0"
@@ -6,7 +6,7 @@ defmodule ExDiag.MixProject do
 
   def project do
     [
-      app: :ex_diag,
+      app: :phoenix_diagrams,
       version: @version,
       elixir: "~> 1.20",
       start_permanent: Mix.env() == :prod,
@@ -37,8 +37,8 @@ defmodule ExDiag.MixProject do
         LICENSE
         usage-rules.md
         .formatter.exs
-        priv/static/ex_diag/build/app.css
-        priv/static/ex_diag/build/bundle.js
+        priv/static/phoenix_diagrams/build/app.css
+        priv/static/phoenix_diagrams/build/bundle.js
       )
     ]
   end

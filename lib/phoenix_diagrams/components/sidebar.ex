@@ -1,4 +1,4 @@
-defmodule ExDiag.Components.Sidebar do
+defmodule PhoenixDiagrams.Components.Sidebar do
   @moduledoc false
 
   use Phoenix.Component
@@ -11,8 +11,8 @@ defmodule ExDiag.Components.Sidebar do
   def sidebar(assigns) do
     ~H"""
     <div class="drawer-side">
-      <label for="ex-diag-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-      <nav aria-label="Diagrams" class="ex-diag-sidebar menu bg-base-200 min-h-full w-72 p-4 gap-1">
+      <label for="phoenix-diagrams-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+      <nav aria-label="Diagrams" class="phoenix-diagrams-sidebar menu bg-base-200 min-h-full w-72 p-4 gap-1">
         <p :if={@entries == []} class="px-2 text-sm text-base-content/60">
           No diagrams found in {@diagrams_path}
         </p>
@@ -46,7 +46,7 @@ defmodule ExDiag.Components.Sidebar do
     active? = selected && selected.key == entry.key
 
     [
-      Map.has_key?(entry, :error) && "ex-diag-entry-error text-error",
+      Map.has_key?(entry, :error) && "phoenix-diagrams-entry-error text-error",
       active? && "menu-active"
     ]
     |> Enum.filter(& &1)

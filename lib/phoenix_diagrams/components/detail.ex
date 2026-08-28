@@ -1,4 +1,4 @@
-defmodule ExDiag.Components.Detail do
+defmodule PhoenixDiagrams.Components.Detail do
   @moduledoc false
 
   use Phoenix.Component
@@ -7,7 +7,7 @@ defmodule ExDiag.Components.Detail do
 
   def detail(assigns) do
     ~H"""
-    <main class="ex-diag-detail flex-1 overflow-auto p-6">
+    <main class="phoenix-diagrams-detail flex-1 overflow-auto p-6">
       <div :if={is_nil(@selected)} class="hero min-h-[50vh]">
         <div class="hero-content text-center">
           <p class="text-base-content/60">Select a diagram from the sidebar.</p>
@@ -16,7 +16,7 @@ defmodule ExDiag.Components.Detail do
       <div
         :if={@selected && Map.has_key?(@selected, :error)}
         role="alert"
-        class="ex-diag-error alert alert-error"
+        class="phoenix-diagrams-error alert alert-error"
       >
         <span><strong>Error loading {@selected.file}:</strong> {@selected.error}</span>
       </div>
@@ -28,28 +28,28 @@ defmodule ExDiag.Components.Detail do
           <div role="tablist" class="tabs tabs-lift">
             <input
               type="radio"
-              name="ex-diag-view-tab"
+              name="phoenix-diagrams-view-tab"
               role="tab"
               class="tab"
               aria-label="Preview"
               checked="checked"
             />
             <div
-              id={"ex-diag-preview-" <> to_string(@selected.type)}
+              id={"phoenix-diagrams-preview-" <> to_string(@selected.type)}
               role="tabpanel"
-              class="ex-diag-preview tab-content bg-base-100 border-base-300 overflow-auto cursor-grab"
+              class="phoenix-diagrams-preview tab-content bg-base-100 border-base-300 overflow-auto cursor-grab"
             >
-              <%!-- ExDiagZoom toggles this container between cursor-grab and cursor-grabbing while panning --%>
+              <%!-- PhoenixDiagramsZoom toggles this container between cursor-grab and cursor-grabbing while panning --%>
               <div
                 role="toolbar"
                 aria-label="Preview actions"
                 class="flex items-center gap-1 rounded-t-box border border-base-300 bg-base-200 px-2 py-1"
               >
                 <button
-                  id="ex-diag-download"
+                  id="phoenix-diagrams-download"
                   type="button"
-                  phx-hook="ExDiagDownload"
-                  data-target={"ex-diag-diagram-" <> to_string(@selected.type)}
+                  phx-hook="PhoenixDiagramsDownload"
+                  data-target={"phoenix-diagrams-diagram-" <> to_string(@selected.type)}
                   data-filename={download_filename(@selected)}
                   class="btn btn-square btn-ghost btn-sm"
                   aria-label="Download diagram as SVG"
@@ -71,9 +71,9 @@ defmodule ExDiag.Components.Detail do
                   </svg>
                 </button>
                 <div
-                  id="ex-diag-zoom"
-                  phx-hook="ExDiagZoom"
-                  data-target={"ex-diag-diagram-" <> to_string(@selected.type)}
+                  id="phoenix-diagrams-zoom"
+                  phx-hook="PhoenixDiagramsZoom"
+                  data-target={"phoenix-diagrams-diagram-" <> to_string(@selected.type)}
                   role="group"
                   aria-label="Zoom controls"
                   class="flex items-center gap-1"
@@ -146,10 +146,10 @@ defmodule ExDiag.Components.Detail do
                   </button>
                 </div>
                 <button
-                  id="ex-diag-fullscreen"
+                  id="phoenix-diagrams-fullscreen"
                   type="button"
-                  phx-hook="ExDiagFullscreen"
-                  data-target={"ex-diag-preview-" <> to_string(@selected.type)}
+                  phx-hook="PhoenixDiagramsFullscreen"
+                  data-target={"phoenix-diagrams-preview-" <> to_string(@selected.type)}
                   class="btn btn-square btn-ghost btn-sm"
                   aria-label="View fullscreen"
                 >
@@ -188,7 +188,7 @@ defmodule ExDiag.Components.Detail do
                 </button>
               </div>
               <div
-                id={"ex-diag-diagram-" <> to_string(@selected.type)}
+                id={"phoenix-diagrams-diagram-" <> to_string(@selected.type)}
                 phx-hook={diagram_hook(@selected)}
                 phx-update="ignore"
                 role="img"
@@ -200,7 +200,7 @@ defmodule ExDiag.Components.Detail do
               </div>
             </div>
 
-            <input type="radio" name="ex-diag-view-tab" role="tab" class="tab" aria-label="Code" />
+            <input type="radio" name="phoenix-diagrams-view-tab" role="tab" class="tab" aria-label="Code" />
             <div role="tabpanel" class="tab-content bg-base-100 border-base-300">
               <div
                 role="toolbar"
@@ -208,10 +208,10 @@ defmodule ExDiag.Components.Detail do
                 class="flex items-center gap-1 rounded-t-box border border-base-300 bg-base-200 px-2 py-1"
               >
                 <button
-                  id="ex-diag-copy"
+                  id="phoenix-diagrams-copy"
                   type="button"
-                  phx-hook="ExDiagCopy"
-                  data-target="ex-diag-code"
+                  phx-hook="PhoenixDiagramsCopy"
+                  data-target="phoenix-diagrams-code"
                   class="btn btn-square btn-ghost btn-sm"
                   aria-label="Copy diagram source"
                 >
@@ -232,7 +232,7 @@ defmodule ExDiag.Components.Detail do
                   </svg>
                 </button>
               </div>
-              <pre class="rounded-b-box border border-t-0 border-base-300 bg-base-200 p-4 overflow-auto"><code id="ex-diag-code">{@selected.source}</code></pre>
+              <pre class="rounded-b-box border border-t-0 border-base-300 bg-base-200 p-4 overflow-auto"><code id="phoenix-diagrams-code">{@selected.source}</code></pre>
             </div>
           </div>
         </div>
@@ -241,8 +241,8 @@ defmodule ExDiag.Components.Detail do
     """
   end
 
-  defp diagram_hook(%{type: :plantuml}), do: "ExDiagPlantuml"
-  defp diagram_hook(_selected), do: "ExDiagMermaid"
+  defp diagram_hook(%{type: :plantuml}), do: "PhoenixDiagramsPlantuml"
+  defp diagram_hook(_selected), do: "PhoenixDiagramsMermaid"
 
   defp download_filename(entry) do
     base = Path.rootname(entry[:name] || entry.file)

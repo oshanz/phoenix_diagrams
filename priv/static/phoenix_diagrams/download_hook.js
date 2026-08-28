@@ -1,4 +1,4 @@
-export const ExDiagDownload = {
+export const PhoenixDiagramsDownload = {
   mounted() {
     this.onClick = () => this.download();
     this.el.addEventListener("click", this.onClick);

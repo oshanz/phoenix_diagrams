@@ -1,6 +1,6 @@
-# ExDiag
+# PhoenixDiagrams
 
-Do you have Mermaid or PlantUML diagrams spread across your codebase? ExDiag
+Do you have Mermaid or PlantUML diagrams spread across your codebase? PhoenixDiagrams
 collects them into a simple catalog view inside your Phoenix app. You
 just point it to a directory of diagram definitions, and it does the rest.
 Everything is rendered on the client side.
@@ -19,7 +19,7 @@ Everything is rendered on the client side.
 ```elixir
 def deps do
   [
-    {:ex_diag, "~> 0.1.0"}
+    {:phoenix_diagrams, "~> 0.1.0"}
   ]
 end
 ```
@@ -34,26 +34,26 @@ diagrams.
 ```elixir
 defmodule MyAppWeb.Router do
   use MyAppWeb, :router
-  import ExDiag.Router
+  import PhoenixDiagrams.Router
 
   scope "/" do
     pipe_through :browser
-    live_ex_diag "/diagrams", diagrams_path: "priv/diagrams"
+    live_phoenix_diagrams "/diagrams", diagrams_path: "priv/diagrams"
   end
 end
 ```
 
-This mounts `ExDiag.DiagramLive` at `/diagrams`. Keep in mind that
+This mounts `PhoenixDiagrams.DiagramLive` at `/diagrams`. Keep in mind that
 `:diagrams_path` is required. There is no default value.
 
 ### 2. Add diagram definitions
 
-Now give ExDiag something to show. It scans the directory you set in
+Now give PhoenixDiagrams something to show. It scans the directory you set in
 `:diagrams_path` for `.exs` files. Each file should evaluate to a keyword
 list, like this:
 
 ```elixir
-# priv/ex_diag/backend/overview.exs
+# priv/phoenix_diagrams/backend/overview.exs
 [
   group: "Backend",
   name: "System Overview",

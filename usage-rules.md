@@ -1,25 +1,25 @@
-## ExDiag usage
+## PhoenixDiagrams usage
 
-ExDiag embeds a Mermaid/PlantUML diagram browser into a host Phoenix app as a
+PhoenixDiagrams embeds a Mermaid/PlantUML diagram browser into a host Phoenix app as a
 mountable LiveView. It scans a directory of `.exs` metadata files, each
 pointing at a `.mmd` or `.puml` source file, and renders them client-side.
 
 ### Mounting it
 
 ```elixir
-import ExDiag.Router
+import PhoenixDiagrams.Router
 
 scope "/" do
   pipe_through :browser
-  live_ex_diag "/diagrams", diagrams_path: "priv/diagrams"
+  live_phoenix_diagrams "/diagrams", diagrams_path: "priv/diagrams"
 end
 ```
 
-Mounts `ExDiag.DiagramLive` at `GET /diagrams`.
+Mounts `PhoenixDiagrams.DiagramLive` at `GET /diagrams`.
 
 ### Diagram source directory
 
-`:diagrams_path` is required — `live_ex_diag/2` raises `ArgumentError` at
+`:diagrams_path` is required — `live_phoenix_diagrams/2` raises `ArgumentError` at
 compile time if it's missing. There is no default and no application config
 fallback.
 
@@ -40,16 +40,16 @@ instead of crashing the host app.
 
 ### Zero host asset wiring
 
-`live_ex_diag` renders on its own standalone page with its own root layout
+`live_phoenix_diagrams` renders on its own standalone page with its own root layout
 and `LiveSocket` — the host's `app.js` never loads there. No changes to
 `app.js`/`assets/`/esbuild config, and no npm dependency on `mermaid` or
 `@plantuml/core`:
 
-- Rendering hooks ship pre-bundled in `priv/static/ex_diag/build/bundle.js`
+- Rendering hooks ship pre-bundled in `priv/static/phoenix_diagrams/build/bundle.js`
   with `mermaid`/`@plantuml/core` fully inlined.
 - `phoenix.mjs`/`phoenix_live_view.esm.js` are served from the host's own
   resolved deps via `Application.app_dir/2` — no version skew.
-- All three are served by `ExDiag.AssetPlug` under `<mount>/ex-diag-assets/*`
+- All three are served by `PhoenixDiagrams.AssetPlug` under `<mount>/phoenix-diagrams-assets/*`
   with a `?v=<hash>` cache-busting fingerprint, safe for long-lived
   `cache-control: immutable`.
 - Styles are compiled into the library and inlined at render time — no
@@ -57,4 +57,4 @@ and `LiveSocket` — the host's `app.js` never loads there. No changes to
 
 The websocket path is fixed at `/live`, matching the standard
 `socket("/live", Phoenix.LiveView.Socket)` mount every Phoenix app already
-has, independent of where `live_ex_diag` itself is mounted.
+has, independent of where `live_phoenix_diagrams` itself is mounted.

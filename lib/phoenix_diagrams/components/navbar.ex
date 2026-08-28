@@ -1,4 +1,4 @@
-defmodule ExDiag.Components.Navbar do
+defmodule PhoenixDiagrams.Components.Navbar do
   @moduledoc false
 
   use Phoenix.Component
@@ -10,7 +10,7 @@ defmodule ExDiag.Components.Navbar do
     <div class="navbar bg-base-200">
       <div class="flex-1 flex items-center">
         <label
-          for="ex-diag-drawer"
+          for="phoenix-diagrams-drawer"
           aria-label="open sidebar"
           class="btn btn-square btn-ghost drawer-button lg:hidden"
         >
@@ -29,14 +29,14 @@ defmodule ExDiag.Components.Navbar do
       </div>
       <div class="flex-none">
         <button
-          id="ex-diag-theme-toggle"
+          id="phoenix-diagrams-theme-toggle"
           type="button"
           class="btn btn-square btn-ghost"
           aria-label="Toggle color theme"
           aria-pressed="false"
         >
           <svg
-            class="ex-diag-theme-icon-light h-5 w-5"
+            class="phoenix-diagrams-theme-icon-light h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -51,7 +51,7 @@ defmodule ExDiag.Components.Navbar do
             />
           </svg>
           <svg
-            class="ex-diag-theme-icon-dark h-5 w-5 hidden"
+            class="phoenix-diagrams-theme-icon-dark h-5 w-5 hidden"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
