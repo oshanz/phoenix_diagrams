@@ -4,12 +4,21 @@ Embeds a Mermaid/PlantUML diagram browser into a host Phoenix app as a mountable
 
 ### Mounting it
 
+Add the dep with `only: :dev` — it's a dev-time tool, not something to ship to production:
+
+```elixir
+{:phoenix_diagrams, "~> 0.2", only: :dev}
+```
+
 ```elixir
 import PhoenixDiagrams.Router
 
 scope "/" do
   pipe_through :browser
-  live_phoenix_diagrams "/diagrams", diagrams_path: "priv/diagrams"
+
+  if Mix.env() == :dev do
+    live_phoenix_diagrams "/diagrams", diagrams_path: "priv/diagrams"
+  end
 end
 ```
 
