@@ -18,6 +18,17 @@ function currentTheme(root) {
   return root?.dataset.theme === "dark" ? "dark" : "light";
 }
 
+function loadingMarkup() {
+  return `<div class="ex-diag-loading flex items-center justify-center gap-2 p-8 text-base-content/60" role="status">
+    <span class="loading loading-spinner loading-sm" aria-hidden="true"></span>
+    <span>Rendering diagram…</span>
+  </div>`;
+}
+
+function waitForPaint() {
+  return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+}
+
 export const ExDiagPlantuml = {
   mounted() {
     this.root = this.el.closest(".ex-diag-root");
@@ -42,27 +53,32 @@ export const ExDiagPlantuml = {
     const el = this.el;
     const dark = currentTheme(this.root) === "dark";
 
-    this.renderQueue = this.renderQueue.then(
-      () =>
-        new Promise((resolve) => {
-          // renderToString's 4th argument isn't in the published API docs
-          // (only render(lines, targetId, {dark}) is documented as
-          // dark-mode-aware) but the engine checks it the same way
-          // internally, so it works for the callback-based string API too.
-          renderToString(
-            source.split(/\r\n|\r|\n/),
-            (svg) => {
-              el.innerHTML = svg;
-              resolve();
-            },
-            (message) => {
-              el.innerHTML = "";
-              el.textContent = `PlantUML render error: ${message}`;
-              resolve();
-            },
-            { dark },
-          );
-        }),
-    );
+    this.renderQueue = this.renderQueue
+      .then(() => {
+        el.innerHTML = loadingMarkup();
+        return waitForPaint();
+      })
+      .then(
+        () =>
+          new Promise((resolve) => {
+            // renderToString's 4th argument isn't in the published API docs
+            // (only render(lines, targetId, {dark}) is documented as
+            // dark-mode-aware) but the engine checks it the same way
+            // internally, so it works for the callback-based string API too.
+            renderToString(
+              source.split(/\r\n|\r|\n/),
+              (svg) => {
+                el.innerHTML = svg;
+                resolve();
+              },
+              (message) => {
+                el.innerHTML = "";
+                el.textContent = `PlantUML render error: ${message}`;
+                resolve();
+              },
+              { dark },
+            );
+          }),
+      );
   },
 };

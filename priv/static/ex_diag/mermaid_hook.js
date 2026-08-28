@@ -56,6 +56,21 @@ function currentTheme(root) {
   return root.dataset.theme === "dark" ? "dark" : "light";
 }
 
+function loadingMarkup() {
+  return `<div class="ex-diag-loading flex items-center justify-center gap-2 p-8 text-base-content/60" role="status">
+    <span class="loading loading-spinner loading-sm" aria-hidden="true"></span>
+    <span>Rendering diagram…</span>
+  </div>`;
+}
+
+// Yield two animation frames so the browser actually paints the loading
+// markup before the (synchronous, main-thread-blocking) mermaid.render()
+// call starts - large diagrams can block the tab for a long time, and
+// without this the loading state would never be visible.
+function waitForPaint() {
+  return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+}
+
 function resolveTheme() {
   return readStoredTheme() || (systemPrefersDark() ? "dark" : "light");
 }
@@ -85,8 +100,13 @@ export const ExDiagMermaid = {
     if (!source) return;
 
     const theme = this.root ? currentTheme(this.root) : "light";
+    const el = this.el;
 
     this.renderQueue = this.renderQueue
+      .then(() => {
+        el.innerHTML = loadingMarkup();
+        return waitForPaint();
+      })
       .then(() => {
         mermaid.initialize(
           theme === "dark"
