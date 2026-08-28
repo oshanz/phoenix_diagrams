@@ -20,7 +20,7 @@ defmodule PhoenixDiagrams.MixProject do
   end
 
   defp description do
-    "Embeds a Mermaid/PlantUML diagram browser LiveView into a host Phoenix application."
+    "A pluggable storybook for your Mermaid/PlantUML diagrams, embeddable in any Phoenix app."
   end
 
   defp package do

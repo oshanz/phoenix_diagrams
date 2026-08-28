@@ -1,22 +1,20 @@
 # PhoenixDiagrams
 
-Do you have Mermaid or PlantUML diagrams spread across your codebase? PhoenixDiagrams
-collects them into a simple catalog view inside your Phoenix app. You
-just point it to a directory of diagram definitions, and it does the rest.
-Everything is rendered on the client side.
+My diagrams were scattered across stale Confluence pages, Notion docs, and Slack threads — none of them matching what the code actually did. So I started using AI agents to generate diagrams straight from the codebase and deployed them somewhere my non-technical teammates could actually find: right inside the app itself, and version-controlled as part of the development flow (trunk-based/gitflow).
+
+PhoenixDiagrams gives your diagrams a home — a slick, searchable catalog embedded in your Phoenix app. Point it at a folder, and watch your Mermaid and PlantUML diagrams come to life, always reflecting the latest state of the system.
 
 ![PhoenixDiagrams screenshot](docs/screenshot.png)
 
-## Features
+## Why you'll like it
 
-- [x] Mermaid diagram rendering
-- [x] PlantUML rendering — no Java or PlantUML server required
-- [x] Pan and zoom on rendered diagrams
-- [x] Copy diagram source to clipboard
-- [x] Download rendered diagram as an image
-- [x] Dev-only live reload — editing a diagram file updates the view
+- 🎨 **Mermaid + PlantUML, rendered client-side** — no Java, no PlantUML server, no headaches
+- 🔍 **Pan and zoom** into every diagram
+- 📋 **Copy source** to clipboard in one click
+- 🖼️ **Download** any diagram as an image
+- 🔄 **Live reload in dev** — save a diagram file, see it update instantly
 
-## Installation
+## Get started in 60 seconds
 
 ```elixir
 def deps do
@@ -26,12 +24,7 @@ def deps do
 end
 ```
 
-## Usage
-
-There are two steps to get started: mount the router, and then add some
-diagrams.
-
-### 1. Mount the router
+### 1. Mount it
 
 ```elixir
 defmodule MyAppWeb.Router do
@@ -45,14 +38,11 @@ defmodule MyAppWeb.Router do
 end
 ```
 
-This mounts `PhoenixDiagrams.DiagramLive` at `/diagrams`. Keep in mind that
-`:diagrams_path` is required. There is no default value.
+That's it — `PhoenixDiagrams.DiagramLive` is now live at `/diagrams`. (`:diagrams_path` is required — there's no default.)
 
-### 2. Add diagram definitions
+### 2. Give it something to show
 
-Now give PhoenixDiagrams something to show. It scans the directory you set in
-`:diagrams_path` for `.exs` files. Each file should evaluate to a keyword
-list, like this:
+Drop a `.exs` file next to your diagram source, and PhoenixDiagrams takes it from there:
 
 ```elixir
 # priv/phoenix_diagrams/backend/overview.exs
@@ -63,14 +53,16 @@ list, like this:
 ]
 ```
 
-`source` points to a `.mmd` (Mermaid) or `.puml` (PlantUML) file. That's all
-you need. Add as many `.exs` files as you like, group them however you want,
-and they will appear in the sidebar.
+`source` points to a `.mmd` (Mermaid) or `.puml` (PlantUML) file. Add as many `.exs` files as you want, group them however makes sense, and they'll show up in the sidebar — no build step, no config sync, no fuss.
 
-## Development
+## Hacking on it
 
 ```sh
 mix deps.get              # install deps
 mix precommit             # format + compile (warnings-as-errors) + credo + test
-cd demo && mix phx.server # try it in a real Phoenix app
+cd demo && mix phx.server  # kick the tires in a real Phoenix app
 ```
+
+## How to contribute
+
+Found a bug or have an idea? PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full rundown on setup, testing, and what we look for in a pull request.
