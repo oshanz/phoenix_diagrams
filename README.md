@@ -4,7 +4,7 @@ My diagrams were scattered across old Confluence pages, Notion docs, and Slack t
 
 PhoenixDiagrams keeps a searchable catalog of Mermaid and PlantUML diagrams inside your Phoenix application. Point it at a directory, and it shows your diagrams in a sidebar and detail view, always in sync with the source files and versioned with the rest of the codebase.
 
-![PhoenixDiagrams screenshot](docs/screenshot.png)
+![PhoenixDiagrams screenshot](https://raw.githubusercontent.com/oshanz/phoenix_diagrams/main/docs/screenshot.png)
 
 ## Features
 
