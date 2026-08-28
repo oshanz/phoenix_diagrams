@@ -1,6 +1,6 @@
 # PhoenixDiagrams
 
-My diagrams were scattered across old Confluence pages, Notion docs, and Slack threads, and none of them matched what the code actually did. So I started using AI agents to generate diagrams straight from the codebase, and deployed them somewhere my non-technical teammates could actually find: inside the app itself, version-controlled as part of the development flow (trunk-based or gitflow).
+My diagrams were scattered across old Confluence pages, Notion docs, and Slack threads, and half the time they didn't even match what the code actually did anymore. So I started having AI agents generate diagrams directly from the codebase instead. Then I deployed them somewhere my non-technical teammates could actually find them: right inside the app, version-controlled as part of the dev workflow (trunk-based or gitflow, whichever you use)
 
 PhoenixDiagrams keeps a searchable catalog of Mermaid and PlantUML diagrams inside your Phoenix application. Point it at a directory, and it shows your diagrams in a sidebar and detail view, always in sync with the source files and versioned with the rest of the codebase.
 
