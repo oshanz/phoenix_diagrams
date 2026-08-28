@@ -3,8 +3,16 @@
 Do you have Mermaid or PlantUML diagrams spread across your codebase? ExDiag
 collects them into a simple catalog view inside your Phoenix app. You
 just point it to a directory of diagram definitions, and it does the rest.
-Everything is rendered on the client side, so you don't need a Java or
-PlantUML server.
+Everything is rendered on the client side.
+
+## Features
+
+- [x] Mermaid diagram rendering
+- [x] PlantUML rendering — no Java or PlantUML server required
+- [x] Pan and zoom on rendered diagrams
+- [x] Copy diagram source to clipboard
+- [x] Download rendered diagram as an image
+- [x] Dev-only live reload — editing a diagram file updates the view
 
 ## Installation
 
