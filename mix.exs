@@ -1,7 +1,7 @@
 defmodule PhoenixDiagrams.MixProject do
   use Mix.Project
 
-  @version "0.2.3"
+  @version "0.2.4"
   @source_url "https://github.com/oshanz/phoenix_diagrams"
 
   def project do
@@ -20,7 +20,7 @@ defmodule PhoenixDiagrams.MixProject do
   end
 
   defp description do
-    "A pluggable storybook for your Mermaid/PlantUML diagrams, embeddable in any Phoenix app."
+    "A pluggable storybook for your Mermaid/PlantUML diagrams."
   end
 
   defp package do
