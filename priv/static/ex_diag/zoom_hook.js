@@ -58,6 +58,9 @@ export const ExDiagZoom = {
     this.onSourceChange = () => this.resetView();
     this.observer = new MutationObserver(this.onSourceChange);
 
+    this.onFullscreenChange = () => this.resetView();
+    document.addEventListener("fullscreenchange", this.onFullscreenChange);
+
     this.attachTarget();
   },
   updated() {
@@ -65,6 +68,7 @@ export const ExDiagZoom = {
   },
   destroyed() {
     this.el.removeEventListener("click", this.onClick);
+    document.removeEventListener("fullscreenchange", this.onFullscreenChange);
     this.observer.disconnect();
     this.detachContainer();
   },
