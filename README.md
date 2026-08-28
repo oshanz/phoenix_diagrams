@@ -1,9 +1,10 @@
 # ExDiag
 
-An Elixir/Phoenix LiveView library that embeds a Mermaid/PlantUML diagram
-browser into a host Phoenix application. Point it at a directory of diagram
-definitions and it mounts a sidebar/detail LiveView that renders them
-client-side — no host CSS wiring, no Java/PlantUML server required.
+Do you have Mermaid or PlantUML diagrams spread across your codebase? ExDiag
+collects them into a simple catalog view inside your Phoenix app. You
+just point it to a directory of diagram definitions, and it does the rest.
+Everything is rendered on the client side, so you don't need a Java or
+PlantUML server.
 
 ## Installation
 
@@ -16,6 +17,9 @@ end
 ```
 
 ## Usage
+
+There are two steps to get started: mount the router, and then add some
+diagrams.
 
 ### 1. Mount the router
 
@@ -31,14 +35,14 @@ defmodule MyAppWeb.Router do
 end
 ```
 
-This mounts `ExDiag.DiagramLive` at `/diagrams` — no changes to your `app.js`
-or asset pipeline needed. See `usage-rules.md` and `CLAUDE.md` for how that's
-wired. `:diagrams_path` is required — there's no default.
+This mounts `ExDiag.DiagramLive` at `/diagrams`. Keep in mind that
+`:diagrams_path` is required. There is no default value.
 
 ### 2. Add diagram definitions
 
-ExDiag scans the directory given via `:diagrams_path` for `.exs` files, each
-evaluating to a keyword list:
+Now give ExDiag something to show. It scans the directory you set in
+`:diagrams_path` for `.exs` files. Each file should evaluate to a keyword
+list, like this:
 
 ```elixir
 # priv/ex_diag/backend/overview.exs
@@ -49,24 +53,14 @@ evaluating to a keyword list:
 ]
 ```
 
-`source` points at a `.mmd` (Mermaid) or `.puml` (PlantUML) file. Diagrams
-are grouped in the sidebar by `:group`. A malformed or unreadable definition
-shows up as an inline error instead of crashing your app.
+`source` points to a `.mmd` (Mermaid) or `.puml` (PlantUML) file. That's all
+you need. Add as many `.exs` files as you like, group them however you want,
+and they will appear in the sidebar.
 
 ## Development
-
-This repo is the `ex_diag` library. `demo/` is a separate Phoenix app (its
-own `mix.exs`/deps/asset pipeline) for manually exercising it — not run by
-`mix test`.
 
 ```sh
 mix deps.get              # install deps
 mix precommit             # format + compile (warnings-as-errors) + credo + test
 cd demo && mix phx.server # try it in a real Phoenix app
 ```
-
-See `CLAUDE.md` for architecture notes and known gotchas.
-
-## License
-
-TODO: Add license information.
