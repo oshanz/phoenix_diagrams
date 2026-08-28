@@ -40,15 +40,15 @@ export const ExDiagPlantuml = {
     if (!source) return;
 
     const el = this.el;
-    // renderToString has no dark-mode option (only PlantUML's render(...,
-    // {dark}) does) - the SVG is always rendered with dark text on a light
-    // background. Give it an explicit light backdrop so that text stays
-    // legible against the app's dark theme instead of turning invisible.
-    el.style.backgroundColor = currentTheme(this.root) === "dark" ? "#fff" : "";
+    const dark = currentTheme(this.root) === "dark";
 
     this.renderQueue = this.renderQueue.then(
       () =>
         new Promise((resolve) => {
+          // renderToString's 4th argument isn't in the published API docs
+          // (only render(lines, targetId, {dark}) is documented as
+          // dark-mode-aware) but the engine checks it the same way
+          // internally, so it works for the callback-based string API too.
           renderToString(
             source.split(/\r\n|\r|\n/),
             (svg) => {
@@ -60,6 +60,7 @@ export const ExDiagPlantuml = {
               el.textContent = `PlantUML render error: ${message}`;
               resolve();
             },
+            { dark },
           );
         }),
     );
