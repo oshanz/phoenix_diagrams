@@ -7,7 +7,7 @@ defmodule PhoenixDiagrams.Components.Detail do
 
   def detail(assigns) do
     ~H"""
-    <main class="phoenix-diagrams-detail flex-1 overflow-auto p-6">
+    <main class="phoenix-diagrams-detail flex-1 overflow-auto">
       <div :if={is_nil(@selected)} class="hero min-h-[50vh]">
         <div class="hero-content text-center">
           <p class="text-base-content/60">Select a diagram from the sidebar.</p>

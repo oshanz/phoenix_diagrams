@@ -44,6 +44,50 @@
   --noise: 0;
 }
 
+.phoenix-diagrams-sidebar-side {
+  position: relative;
+  overflow: visible;
+}
+
+.phoenix-diagrams-sidebar {
+  position: relative;
+  width: var(--phoenix-diagrams-sidebar-width, 18rem);
+  flex-shrink: 0;
+  overflow-y: auto;
+  transition: width 120ms ease, padding 120ms ease;
+}
+
+[data-sidebar-collapsed="true"] .phoenix-diagrams-sidebar {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  border-width: 0;
+}
+
+[data-sidebar-collapsed="true"] .phoenix-diagrams-sidebar > * {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#phoenix-diagrams-sidebar-toggle[aria-expanded="false"] {
+  background-color: var(--color-base-300);
+}
+
+.phoenix-diagrams-sidebar-resizer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -3px;
+  width: 6px;
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 1;
+}
+
+[data-sidebar-collapsed="true"] .phoenix-diagrams-sidebar-resizer {
+  display: none;
+}
+
 .phoenix-diagrams-preview:fullscreen {
   display: flex;
   flex-direction: column;
