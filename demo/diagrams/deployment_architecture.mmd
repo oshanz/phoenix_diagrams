@@ -1,0 +1,23 @@
+flowchart LR
+    Dev[Developer] -->|push / workflow_dispatch| GA[".github/workflows/publish.yml"]
+    GA -->|docker build\n(Dockerfile)| Image["mynameis image"]
+    Image -->|docker push| GHCR[(GHCR registry)]
+    GA -->|ssh| VM
+
+    subgraph VM["Hetzner VM (terraform/, cloud-init)"]
+        Deploy["bin/deploy-remote.sh"]
+        Compose["docker compose\n(docker-compose.prod.yml)"]
+        Caddy["Caddy\n(TLS termination)"]
+        App["mynameis release\n(bin/migrate then bin/server)"]
+        SQLite[(SQLite volume)]
+        Env[".env\n(SECRET_KEY_BASE, OPENROUTER_API_KEY,\nBASIC_AUTH_*) -- set by hand, never in CI"]
+    end
+
+    GHCR -->|docker compose pull| Deploy
+    Deploy --> Compose
+    Compose --> Caddy
+    Compose --> App
+    App --> SQLite
+    Env -.-> App
+
+    Internet([Internet]) --> Caddy --> App

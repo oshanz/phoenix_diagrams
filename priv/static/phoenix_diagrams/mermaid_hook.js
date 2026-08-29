@@ -63,6 +63,18 @@ function loadingMarkup() {
   </div>`;
 }
 
+function errorMarkup(message) {
+  return `<div class="phoenix-diagrams-error alert alert-error m-4" role="alert">
+    <span><strong>Mermaid render error:</strong> ${escapeHtml(message)}</span>
+  </div>`;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
 // Yield two animation frames so the browser actually paints the loading
 // markup before the (synchronous, main-thread-blocking) mermaid.render()
 // call starts - large diagrams can block the tab for a long time, and
@@ -121,6 +133,9 @@ export const PhoenixDiagramsMermaid = {
       })
       .then(({ svg }) => {
         this.el.innerHTML = svg;
+      })
+      .catch((error) => {
+        this.el.innerHTML = errorMarkup(error?.message ?? String(error));
       });
   },
 };
