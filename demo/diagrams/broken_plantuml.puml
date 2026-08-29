@@ -1,0 +1,8 @@
+@startuml
+clss Foo {
+  +bar(): void
+class Baz {
+  +qux(): void
+}
+Foo --> Baz
+@enduml
