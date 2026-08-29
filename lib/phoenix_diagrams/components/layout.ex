@@ -26,6 +26,18 @@ defmodule PhoenixDiagrams.Components.Layout do
     } catch (e) {}
     var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
     root.dataset.theme = stored || (prefersDark ? "dark" : "light");
+
+    var storedWidth = null;
+    var storedCollapsed = null;
+    try {
+      storedWidth = window.localStorage.getItem("phoenix_diagrams_sidebar_width");
+      storedCollapsed = window.localStorage.getItem("phoenix_diagrams_sidebar_collapsed");
+    } catch (e) {}
+    var width = parseInt(storedWidth, 10);
+    if (!isFinite(width)) width = 288;
+    width = Math.min(500, Math.max(200, width));
+    root.style.setProperty("--phoenix-diagrams-sidebar-width", width + "px");
+    root.dataset.sidebarCollapsed = storedCollapsed === "true" ? "true" : "false";
   })();
   """
 

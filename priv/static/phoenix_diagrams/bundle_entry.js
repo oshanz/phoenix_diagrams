@@ -4,3 +4,4 @@ export {PhoenixDiagramsDownload} from "./download_hook";
 export {PhoenixDiagramsCopy} from "./copy_hook";
 export {PhoenixDiagramsFullscreen} from "./fullscreen_hook";
 export {PhoenixDiagramsZoom} from "./zoom_hook";
+export {PhoenixDiagramsSidebar} from "./sidebar_hook";

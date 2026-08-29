@@ -10,9 +10,14 @@ defmodule PhoenixDiagrams.Components.Sidebar do
 
   def sidebar(assigns) do
     ~H"""
-    <div class="drawer-side">
+    <div class="drawer-side phoenix-diagrams-sidebar-side">
       <label for="phoenix-diagrams-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-      <nav aria-label="Diagrams" class="phoenix-diagrams-sidebar menu bg-base-200 min-h-full w-72 p-4 gap-1">
+      <nav
+        id="phoenix-diagrams-sidebar"
+        phx-hook="PhoenixDiagramsSidebar"
+        aria-label="Diagrams"
+        class="phoenix-diagrams-sidebar menu bg-base-200 min-h-full p-4 gap-1"
+      >
         <p :if={@entries == []} class="px-2 text-sm text-base-content/60">
           No diagrams found in {@diagrams_path}
         </p>
@@ -38,6 +43,7 @@ defmodule PhoenixDiagrams.Components.Sidebar do
           </ul>
         </li>
       </nav>
+      <div class="phoenix-diagrams-sidebar-resizer" aria-hidden="true"></div>
     </div>
     """
   end
