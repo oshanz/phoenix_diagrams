@@ -51,7 +51,8 @@ defmodule PhoenixDiagrams.Components.Detail do
                   phx-hook="PhoenixDiagramsDownload"
                   data-target={"phoenix-diagrams-diagram-" <> to_string(@selected.type)}
                   data-filename={download_filename(@selected)}
-                  class="btn btn-square btn-ghost btn-sm"
+                  class="btn btn-square btn-ghost btn-sm tooltip tooltip-bottom"
+                  data-tip="Download diagram as SVG"
                   aria-label="Download diagram as SVG"
                 >
                   <svg
@@ -70,6 +71,28 @@ defmodule PhoenixDiagrams.Components.Detail do
                     />
                   </svg>
                 </button>
+                <button
+                  id="phoenix-diagrams-share"
+                  type="button"
+                  phx-hook="PhoenixDiagramsShare"
+                  class="btn btn-square btn-ghost btn-sm tooltip tooltip-bottom"
+                  data-tip="Copy shareable link"
+                  aria-label="Copy shareable link"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z"
+                    />
+                  </svg>
+                </button>
                 <div
                   id="phoenix-diagrams-zoom"
                   phx-hook="PhoenixDiagramsZoom"
@@ -81,7 +104,8 @@ defmodule PhoenixDiagrams.Components.Detail do
                   <button
                     type="button"
                     data-zoom-action="out"
-                    class="btn btn-square btn-ghost btn-sm"
+                    class="btn btn-square btn-ghost btn-sm tooltip tooltip-bottom"
+                    data-tip="Zoom out"
                     aria-label="Zoom out"
                   >
                     <svg
@@ -103,7 +127,8 @@ defmodule PhoenixDiagrams.Components.Detail do
                   <button
                     type="button"
                     data-zoom-action="reset"
-                    class="btn btn-square btn-ghost btn-sm"
+                    class="btn btn-square btn-ghost btn-sm tooltip tooltip-bottom"
+                    data-tip="Reset zoom"
                     aria-label="Reset zoom"
                   >
                     <svg
@@ -125,7 +150,8 @@ defmodule PhoenixDiagrams.Components.Detail do
                   <button
                     type="button"
                     data-zoom-action="in"
-                    class="btn btn-square btn-ghost btn-sm"
+                    class="btn btn-square btn-ghost btn-sm tooltip tooltip-bottom"
+                    data-tip="Zoom in"
                     aria-label="Zoom in"
                   >
                     <svg
@@ -150,7 +176,8 @@ defmodule PhoenixDiagrams.Components.Detail do
                   type="button"
                   phx-hook="PhoenixDiagramsFullscreen"
                   data-target={"phoenix-diagrams-preview-" <> to_string(@selected.type)}
-                  class="btn btn-square btn-ghost btn-sm"
+                  class="btn btn-square btn-ghost btn-sm tooltip tooltip-bottom"
+                  data-tip="View fullscreen"
                   aria-label="View fullscreen"
                 >
                   <svg
@@ -212,7 +239,8 @@ defmodule PhoenixDiagrams.Components.Detail do
                   type="button"
                   phx-hook="PhoenixDiagramsCopy"
                   data-target="phoenix-diagrams-code"
-                  class="btn btn-square btn-ghost btn-sm"
+                  class="btn btn-square btn-ghost btn-sm tooltip"
+                  data-tip="Copy diagram source"
                   aria-label="Copy diagram source"
                 >
                   <svg

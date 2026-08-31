@@ -98,3 +98,19 @@
   flex: 1;
   overflow: auto;
 }
+
+@keyframes phoenix-diagrams-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+#phoenix-diagrams-share.phoenix-diagrams-share-clicked {
+  animation: phoenix-diagrams-pulse 300ms ease-in-out;
+}
