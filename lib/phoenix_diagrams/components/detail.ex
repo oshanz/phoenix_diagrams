@@ -9,8 +9,8 @@ defmodule PhoenixDiagrams.Components.Detail do
 
   def detail(assigns) do
     ~H"""
-    <main class="phoenix-diagrams-detail flex-1 overflow-auto">
-      <div :if={is_nil(@selected)} class="hero min-h-[50vh]">
+    <main class="phoenix-diagrams-detail flex-1 min-h-0 overflow-auto flex flex-col">
+      <div :if={is_nil(@selected)} class="hero min-h-[50vh] flex-1">
         <div class="hero-content text-center">
           <p class="text-base-content/60">Select a diagram from the sidebar.</p>
         </div>
@@ -24,10 +24,10 @@ defmodule PhoenixDiagrams.Components.Detail do
       </div>
       <div
         :if={@selected && !Map.has_key?(@selected, :error)}
-        class="card bg-base-100 shadow-sm border border-base-300"
+        class="card bg-base-100 shadow-sm border border-base-300 flex-1 min-h-0 flex flex-col"
       >
-        <div class="card-body">
-          <div role="tablist" class="tabs tabs-lift">
+        <div class="card-body flex-1 min-h-0 flex flex-col">
+          <div role="tablist" class="tabs tabs-lift flex-1 min-h-0">
             <input
               type="radio"
               name="phoenix-diagrams-view-tab"
@@ -42,6 +42,7 @@ defmodule PhoenixDiagrams.Components.Detail do
               class="phoenix-diagrams-preview tab-content bg-base-100 border-base-300 overflow-auto cursor-grab"
             >
               <%!-- PhoenixDiagramsZoom toggles this container between cursor-grab and cursor-grabbing while panning --%>
+              <div class="h-full min-h-0 flex flex-col">
               <div
                 role="toolbar"
                 aria-label="Preview actions"
@@ -125,9 +126,10 @@ defmodule PhoenixDiagrams.Components.Detail do
                 role="img"
                 aria-label={"Diagram: " <> (@selected[:name] || @selected.file)}
                 data-source={@selected.source}
-                class="rounded-b-box border border-t-0 border-base-300 p-4"
+                class="rounded-b-box border border-t-0 border-base-300 p-4 flex-1 min-h-0 overflow-auto"
               >
                 <pre class="mermaid">{@selected.source}</pre>
+              </div>
               </div>
             </div>
 
