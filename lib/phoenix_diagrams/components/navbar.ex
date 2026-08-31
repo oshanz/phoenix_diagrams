@@ -26,18 +26,7 @@ defmodule PhoenixDiagrams.Components.Navbar do
           aria-controls="phoenix-diagrams-sidebar"
           aria-expanded="true"
         >
-          <svg
-            class="phoenix-diagrams-collapse-icon my-1.5 inline-block h-5 w-5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2" />
-            <path d="M9 3v18" stroke-width="2" />
-            <rect x="4" y="4" width="4.5" height="16" rx="1" fill="currentColor" stroke="none" />
-          </svg>
+          <Icons.sidebar_collapse class="phoenix-diagrams-collapse-icon my-1.5 inline-block h-5 w-5" />
         </button>
         <span class="ml-2 font-semibold">{navbar_title(@selected)}</span>
       </div>
