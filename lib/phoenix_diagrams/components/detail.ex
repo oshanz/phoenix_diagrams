@@ -3,6 +3,8 @@ defmodule PhoenixDiagrams.Components.Detail do
 
   use Phoenix.Component
 
+  alias PhoenixDiagrams.Components.Icons
+
   attr(:selected, :map, default: nil)
 
   def detail(assigns) do
@@ -55,21 +57,7 @@ defmodule PhoenixDiagrams.Components.Detail do
                   data-tip="Download diagram as SVG"
                   aria-label="Download diagram as SVG"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M7 10l5 5 5-5M12 15V3"
-                    />
-                  </svg>
+                  <Icons.arrow_down_tray class="h-5 w-5" />
                 </button>
                 <button
                   id="phoenix-diagrams-share"
@@ -79,19 +67,7 @@ defmodule PhoenixDiagrams.Components.Detail do
                   data-tip="Copy shareable link"
                   aria-label="Copy shareable link"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z"
-                    />
-                  </svg>
+                  <Icons.share class="h-5 w-5" />
                 </button>
                 <div
                   id="phoenix-diagrams-zoom"
@@ -108,21 +84,7 @@ defmodule PhoenixDiagrams.Components.Detail do
                     data-tip="Zoom out"
                     aria-label="Zoom out"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M21 21l-4.35-4.35M11 8v0M8 11h6M17 11A6 6 0 105 11a6 6 0 0012 0z"
-                      />
-                    </svg>
+                    <Icons.magnifying_glass_minus class="h-5 w-5" />
                   </button>
                   <button
                     type="button"
@@ -131,21 +93,7 @@ defmodule PhoenixDiagrams.Components.Detail do
                     data-tip="Reset zoom"
                     aria-label="Reset zoom"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4 4v5h5M20 20v-5h-5M4 9a8 8 0 0113.66-4.66M20 15a8 8 0 01-13.66 4.66"
-                      />
-                    </svg>
+                    <Icons.arrow_path class="h-5 w-5" />
                   </button>
                   <button
                     type="button"
@@ -154,21 +102,7 @@ defmodule PhoenixDiagrams.Components.Detail do
                     data-tip="Zoom in"
                     aria-label="Zoom in"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M21 21l-4.35-4.35M11 8v6M8 11h6M17 11A6 6 0 105 11a6 6 0 0012 0z"
-                      />
-                    </svg>
+                    <Icons.magnifying_glass_plus class="h-5 w-5" />
                   </button>
                 </div>
                 <button
@@ -180,38 +114,8 @@ defmodule PhoenixDiagrams.Components.Detail do
                   data-tip="View fullscreen"
                   aria-label="View fullscreen"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                    data-icon="expand"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                    />
-                  </svg>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 hidden"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                    data-icon="collapse"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 9V5m0 4H5m4 0L4 4m11 5V5m0 4h4m-4 0l5-5M9 15v4m0-4H5m4 0l-5 5m11-5v4m0-4h4m-4 0l5 5"
-                    />
-                  </svg>
+                  <Icons.arrows_pointing_out class="h-5 w-5" data-icon="expand" />
+                  <Icons.arrows_pointing_in class="h-5 w-5 hidden" data-icon="collapse" />
                 </button>
               </div>
               <div
@@ -243,21 +147,7 @@ defmodule PhoenixDiagrams.Components.Detail do
                   data-tip="Copy diagram source"
                   aria-label="Copy diagram source"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
+                  <Icons.document_duplicate class="h-5 w-5" />
                 </button>
               </div>
               <pre class="rounded-b-box border border-t-0 border-base-300 bg-base-200 p-4 overflow-auto"><code id="phoenix-diagrams-code">{@selected.source}</code></pre>
