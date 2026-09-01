@@ -6,7 +6,6 @@ defmodule PhoenixDiagrams.DiagramLive do
   @impl true
   def mount(_params, %{"diagrams_path" => diagrams_path}, socket) do
     entries = Loader.scan(diagrams_path)
-    selected = Enum.find(entries, &(!Map.has_key?(&1, :error)))
 
     if connected?(socket), do: watch(diagrams_path)
 
@@ -14,16 +13,27 @@ defmodule PhoenixDiagrams.DiagramLive do
      assign(socket,
        entries: entries,
        groups: group_entries(entries),
-       selected: selected,
        diagrams_path: diagrams_path
      )}
   end
 
   @impl true
+  def handle_params(params, uri, socket) do
+    selected =
+      select_entry(socket.assigns.entries, socket.assigns.diagrams_path, params["d"])
+
+    {:noreply, assign(socket, selected: selected, path: URI.parse(uri).path)}
+  end
+
+  @impl true
   def handle_event("select", %{"key" => key}, socket) do
     case Enum.find(socket.assigns.entries, &(&1.key == key)) do
-      nil -> {:noreply, socket}
-      entry -> {:noreply, assign(socket, :selected, entry)}
+      nil ->
+        {:noreply, socket}
+
+      entry ->
+        id = diagram_id(entry, socket.assigns.diagrams_path)
+        {:noreply, push_patch(socket, to: "#{socket.assigns.path}?d=#{id}")}
     end
   end
 
@@ -54,6 +64,23 @@ defmodule PhoenixDiagrams.DiagramLive do
     end
   else
     defp watch(_diagrams_path), do: :ok
+  end
+
+  defp select_entry(entries, _diagrams_path, nil), do: default_entry(entries)
+
+  defp select_entry(entries, diagrams_path, id) do
+    Enum.find(entries, &(diagram_id(&1, diagrams_path) == id)) || default_entry(entries)
+  end
+
+  defp default_entry(entries), do: Enum.find(entries, &(!Map.has_key?(&1, :error)))
+
+  @doc false
+  def diagram_id(entry, diagrams_path) do
+    entry.key
+    |> Path.relative_to(diagrams_path)
+    |> then(&:crypto.hash(:sha256, &1))
+    |> Base.encode16(case: :lower)
+    |> binary_part(0, 8)
   end
 
   defp group_entries(entries) do

@@ -49,10 +49,14 @@ defmodule PhoenixDiagrams.Components.Layout do
   def layout(assigns) do
     ~H"""
     {Phoenix.HTML.raw("<style>" <> phoenix_diagrams_css() <> "</style>")}
-    <div id="phoenix-diagrams-root" phx-hook="PhoenixDiagramsTheme" class="phoenix-diagrams-root drawer lg:drawer-open">
+    <div
+      id="phoenix-diagrams-root"
+      phx-hook="PhoenixDiagramsTheme"
+      class="phoenix-diagrams-root drawer lg:drawer-open h-screen overflow-hidden"
+    >
       {Phoenix.HTML.raw("<script>" <> initial_theme_script() <> "</script>")}
       <input id="phoenix-diagrams-drawer" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content flex flex-col">
+      <div class="drawer-content flex flex-col h-full min-h-0">
         <.navbar selected={@selected} />
         <p class="sr-only" role="status">
           {(@selected && (@selected[:name] || @selected.file)) || "No diagram selected"}

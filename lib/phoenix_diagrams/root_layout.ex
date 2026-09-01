@@ -32,12 +32,12 @@ defmodule PhoenixDiagrams.RootLayout do
     """
     import {Socket} from "#{base}/phoenix-diagrams-assets/phoenix.mjs?v=#{v}";
     import {LiveSocket} from "#{base}/phoenix-diagrams-assets/phoenix_live_view.esm.js?v=#{v}";
-    import {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom, PhoenixDiagramsSidebar} from "#{base}/phoenix-diagrams-assets/bundle.js?v=#{v}";
+    import {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsShare, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom, PhoenixDiagramsSidebar} from "#{base}/phoenix-diagrams-assets/bundle.js?v=#{v}";
 
     const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const liveSocket = new LiveSocket("/live", Socket, {
       params: {_csrf_token: csrfToken},
-      hooks: {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom, PhoenixDiagramsSidebar},
+      hooks: {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsShare, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom, PhoenixDiagramsSidebar},
     });
     liveSocket.connect();
     """
