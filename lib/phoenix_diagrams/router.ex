@@ -27,18 +27,26 @@ defmodule PhoenixDiagrams.Router do
   diagram definitions to scan — there is no default.
 
       live_phoenix_diagrams "/diagrams", diagrams_path: "priv/diagrams"
+
+  Accepts an optional `:app_version` string, displayed next to the title in
+  the navbar — omit it and nothing is shown.
+
+      live_phoenix_diagrams "/diagrams", diagrams_path: "priv/diagrams", app_version: "1.2.3"
   """
   defmacro live_phoenix_diagrams(path, opts) do
     diagrams_path =
       Keyword.get(opts, :diagrams_path) ||
         raise ArgumentError, "live_phoenix_diagrams/2 requires a :diagrams_path option"
 
+    app_version = Keyword.get(opts, :app_version)
+
     session_name = :"phoenix_diagrams_#{:erlang.phash2(path)}"
 
     quote bind_quoted: [
             path: path,
             session_name: session_name,
-            diagrams_path: diagrams_path
+            diagrams_path: diagrams_path,
+            app_version: app_version
           ] do
       require Phoenix.LiveView.Router
       alias Phoenix.LiveView.Router, as: LiveRouter
@@ -46,7 +54,7 @@ defmodule PhoenixDiagrams.Router do
       scope path, alias: false do
         LiveRouter.live_session session_name,
           root_layout: {PhoenixDiagrams.RootLayout, :root},
-          session: %{"diagrams_path" => diagrams_path} do
+          session: %{"diagrams_path" => diagrams_path, "app_version" => app_version} do
           LiveRouter.live("/", PhoenixDiagrams.DiagramLive, :index)
         end
 

@@ -20,7 +20,10 @@ defmodule DemoWeb.Router do
 
     get "/", PageController, :home
 
-    live_phoenix_diagrams("/diagrams", diagrams_path:  "diagrams/")
+    live_phoenix_diagrams("/diagrams",
+      diagrams_path: "diagrams/",
+      app_version: Application.spec(:demo, :vsn) |> to_string()
+    )
   end
 
   # Other scopes may use custom stacks.

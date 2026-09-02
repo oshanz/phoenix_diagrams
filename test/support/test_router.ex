@@ -13,5 +13,10 @@ defmodule PhoenixDiagrams.TestRouter do
     pipe_through(:browser)
     live_phoenix_diagrams("/diagrams", diagrams_path: @diagrams_path)
     live_phoenix_diagrams("/diagrams2", diagrams_path: @diagrams_path)
+
+    live_phoenix_diagrams("/diagrams-versioned",
+      diagrams_path: @diagrams_path,
+      app_version: "1.2.3"
+    )
   end
 end

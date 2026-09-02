@@ -4,7 +4,7 @@ defmodule PhoenixDiagrams.DiagramLive do
   alias PhoenixDiagrams.Loader
 
   @impl true
-  def mount(_params, %{"diagrams_path" => diagrams_path}, socket) do
+  def mount(_params, %{"diagrams_path" => diagrams_path} = session, socket) do
     entries = Loader.scan(diagrams_path)
 
     if connected?(socket), do: watch(diagrams_path)
@@ -13,7 +13,8 @@ defmodule PhoenixDiagrams.DiagramLive do
      assign(socket,
        entries: entries,
        groups: group_entries(entries),
-       diagrams_path: diagrams_path
+       diagrams_path: diagrams_path,
+       app_version: session["app_version"]
      )}
   end
 
@@ -40,7 +41,7 @@ defmodule PhoenixDiagrams.DiagramLive do
   @impl true
   def handle_info({:file_event, _watcher_pid, {_path, _events}}, socket) do
     entries = Loader.scan(socket.assigns.diagrams_path)
-    previous_key = socket.assigns.selected && socket.assigns.selected.key
+    previous_key = is_map(socket.assigns.selected) && socket.assigns.selected.key
 
     selected =
       Enum.find(entries, &(&1.key == previous_key)) ||
@@ -69,7 +70,7 @@ defmodule PhoenixDiagrams.DiagramLive do
   defp select_entry(entries, _diagrams_path, nil), do: default_entry(entries)
 
   defp select_entry(entries, diagrams_path, id) do
-    Enum.find(entries, &(diagram_id(&1, diagrams_path) == id)) || default_entry(entries)
+    Enum.find(entries, &(diagram_id(&1, diagrams_path) == id)) || :not_found
   end
 
   defp default_entry(entries), do: Enum.find(entries, &(!Map.has_key?(&1, :error)))
