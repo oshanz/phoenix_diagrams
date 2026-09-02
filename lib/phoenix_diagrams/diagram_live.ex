@@ -4,7 +4,7 @@ defmodule PhoenixDiagrams.DiagramLive do
   alias PhoenixDiagrams.Loader
 
   @impl true
-  def mount(_params, %{"diagrams_path" => diagrams_path}, socket) do
+  def mount(_params, %{"diagrams_path" => diagrams_path} = session, socket) do
     entries = Loader.scan(diagrams_path)
 
     if connected?(socket), do: watch(diagrams_path)
@@ -13,7 +13,8 @@ defmodule PhoenixDiagrams.DiagramLive do
      assign(socket,
        entries: entries,
        groups: group_entries(entries),
-       diagrams_path: diagrams_path
+       diagrams_path: diagrams_path,
+       app_version: session["app_version"]
      )}
   end
 

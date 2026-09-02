@@ -45,6 +45,7 @@ defmodule PhoenixDiagrams.Components.Layout do
   attr(:groups, :list, required: true)
   attr(:selected, :any, default: nil)
   attr(:diagrams_path, :string, required: true)
+  attr(:app_version, :string, default: nil)
 
   def layout(assigns) do
     ~H"""
@@ -57,7 +58,7 @@ defmodule PhoenixDiagrams.Components.Layout do
       {Phoenix.HTML.raw("<script>" <> initial_theme_script() <> "</script>")}
       <input id="phoenix-diagrams-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex flex-col h-full min-h-0">
-        <.navbar selected={@selected} />
+        <.navbar selected={@selected} app_version={@app_version} />
         <p class="sr-only" role="status">
           {(is_map(@selected) && (@selected[:name] || @selected.file)) || not_found_status(@selected)}
         </p>

@@ -16,6 +16,18 @@ defmodule PhoenixDiagrams.DiagramLiveTest do
     assert has_element?(view, "#phoenix-diagrams-drawer.drawer-toggle")
   end
 
+  test "does not render an app version when :app_version is not configured" do
+    {:ok, _view, html} = live(get(build_conn(), "/diagrams"))
+
+    refute html =~ "opacity-60"
+  end
+
+  test "renders the configured app version in the navbar" do
+    {:ok, _view, html} = live(get(build_conn(), "/diagrams-versioned"))
+
+    assert html =~ "v1.2.3"
+  end
+
   test "renders a theme toggle button in the navbar" do
     {:ok, view, _html} = live(get(build_conn(), "/diagrams"))
 

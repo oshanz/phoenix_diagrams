@@ -6,6 +6,7 @@ defmodule PhoenixDiagrams.Components.Navbar do
   alias PhoenixDiagrams.Components.Icons
 
   attr(:selected, :any, default: nil)
+  attr(:app_version, :string, default: nil)
 
   def navbar(assigns) do
     ~H"""
@@ -30,7 +31,8 @@ defmodule PhoenixDiagrams.Components.Navbar do
         </button>
         <span class="ml-2 font-semibold">{navbar_title(@selected)}</span>
       </div>
-      <div class="flex-none">
+      <div class="flex-none flex items-center">
+        <span :if={@app_version} class="mr-2 text-xs opacity-60">v{@app_version}</span>
         <button
           id="phoenix-diagrams-theme-toggle"
           type="button"
