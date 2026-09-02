@@ -5,7 +5,7 @@ defmodule PhoenixDiagrams.Components.Detail do
 
   alias PhoenixDiagrams.Components.Icons
 
-  attr(:selected, :map, default: nil)
+  attr(:selected, :any, default: nil)
 
   def detail(assigns) do
     ~H"""
@@ -15,15 +15,22 @@ defmodule PhoenixDiagrams.Components.Detail do
           <p class="text-base-content/60">Select a diagram from the sidebar.</p>
         </div>
       </div>
+      <div :if={@selected == :not_found} class="hero min-h-[50vh] flex-1">
+        <div class="hero-content text-center">
+          <p role="alert" class="phoenix-diagrams-not-found text-base-content/60">
+            Diagram not found.
+          </p>
+        </div>
+      </div>
       <div
-        :if={@selected && Map.has_key?(@selected, :error)}
+        :if={is_map(@selected) && Map.has_key?(@selected, :error)}
         role="alert"
         class="phoenix-diagrams-error alert alert-error"
       >
         <span><strong>Error loading {@selected.file}:</strong> {@selected.error}</span>
       </div>
       <div
-        :if={@selected && !Map.has_key?(@selected, :error)}
+        :if={is_map(@selected) && !Map.has_key?(@selected, :error)}
         class="card bg-base-100 shadow-sm border border-base-300 flex-1 min-h-0 flex flex-col"
       >
         <div class="card-body flex-1 min-h-0 flex flex-col">

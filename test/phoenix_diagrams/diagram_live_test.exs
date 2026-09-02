@@ -99,10 +99,11 @@ defmodule PhoenixDiagrams.DiagramLiveTest do
            )
   end
 
-  test "mounting with an unknown ?d= param falls back to the default entry" do
+  test "mounting with an unknown ?d= param shows a not-found state" do
     {:ok, _view, html} = live(get(build_conn(), "/diagrams?d=deadbeef"))
 
-    assert html =~ "graph TD"
+    assert html =~ "phoenix-diagrams-not-found"
+    refute html =~ "graph TD"
   end
 
   defp diagram_id(relative_file) do

@@ -5,7 +5,7 @@ defmodule PhoenixDiagrams.Components.Sidebar do
 
   attr(:entries, :list, required: true)
   attr(:groups, :list, required: true)
-  attr(:selected, :map, default: nil)
+  attr(:selected, :any, default: nil)
   attr(:diagrams_path, :string, required: true)
 
   def sidebar(assigns) do
@@ -28,7 +28,7 @@ defmodule PhoenixDiagrams.Components.Sidebar do
               <button
                 phx-click="select"
                 phx-value-key={entry.key}
-                aria-current={@selected && @selected.key == entry.key && "true"}
+                aria-current={is_map(@selected) && @selected.key == entry.key && "true"}
                 class={entry_class(entry, @selected)}
               >
                 <span
@@ -49,7 +49,7 @@ defmodule PhoenixDiagrams.Components.Sidebar do
   end
 
   defp entry_class(entry, selected) do
-    active? = selected && selected.key == entry.key
+    active? = is_map(selected) && selected.key == entry.key
 
     [
       Map.has_key?(entry, :error) && "phoenix-diagrams-entry-error text-error",

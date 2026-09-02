@@ -43,7 +43,7 @@ defmodule PhoenixDiagrams.Components.Layout do
 
   attr(:entries, :list, required: true)
   attr(:groups, :list, required: true)
-  attr(:selected, :map, default: nil)
+  attr(:selected, :any, default: nil)
   attr(:diagrams_path, :string, required: true)
 
   def layout(assigns) do
@@ -59,7 +59,7 @@ defmodule PhoenixDiagrams.Components.Layout do
       <div class="drawer-content flex flex-col h-full min-h-0">
         <.navbar selected={@selected} />
         <p class="sr-only" role="status">
-          {(@selected && (@selected[:name] || @selected.file)) || "No diagram selected"}
+          {(is_map(@selected) && (@selected[:name] || @selected.file)) || not_found_status(@selected)}
         </p>
         <.detail selected={@selected} />
       </div>
@@ -70,4 +70,7 @@ defmodule PhoenixDiagrams.Components.Layout do
 
   defp phoenix_diagrams_css, do: @phoenix_diagrams_css
   defp initial_theme_script, do: @initial_theme_script
+
+  defp not_found_status(:not_found), do: "Diagram not found"
+  defp not_found_status(_selected), do: "No diagram selected"
 end

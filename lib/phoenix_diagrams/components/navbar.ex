@@ -5,7 +5,7 @@ defmodule PhoenixDiagrams.Components.Navbar do
 
   alias PhoenixDiagrams.Components.Icons
 
-  attr(:selected, :map, default: nil)
+  attr(:selected, :any, default: nil)
 
   def navbar(assigns) do
     ~H"""
@@ -47,5 +47,6 @@ defmodule PhoenixDiagrams.Components.Navbar do
   end
 
   defp navbar_title(nil), do: "Diagrams"
+  defp navbar_title(:not_found), do: "Diagram not found"
   defp navbar_title(selected), do: selected[:name] || selected.file
 end
