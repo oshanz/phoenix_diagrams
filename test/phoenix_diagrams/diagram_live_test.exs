@@ -118,6 +118,70 @@ defmodule PhoenixDiagrams.DiagramLiveTest do
     refute html =~ "graph TD"
   end
 
+  test "renders a search input in the sidebar" do
+    {:ok, _view, html} = live(get(build_conn(), "/diagrams"))
+
+    assert html =~ ~s(phx-change="search")
+  end
+
+  test "typing in the search box filters the diagram list by name" do
+    {:ok, view, _html} = live(get(build_conn(), "/diagrams"))
+
+    html =
+      view
+      |> form("#phoenix-diagrams-search-form", %{"q" => "Auth"})
+      |> render_change()
+
+    assert html =~ "Auth Flow"
+    refute html =~ "Login Sequence"
+  end
+
+  test "an empty search shows all diagrams again" do
+    {:ok, view, _html} = live(get(build_conn(), "/diagrams"))
+
+    view
+    |> form("#phoenix-diagrams-search-form", %{"q" => "Auth"})
+    |> render_change()
+
+    html =
+      view
+      |> form("#phoenix-diagrams-search-form", %{"q" => ""})
+      |> render_change()
+
+    assert html =~ "Auth Flow"
+    assert html =~ "Login Sequence"
+  end
+
+  test "search matching nothing shows an empty-results message" do
+    {:ok, view, _html} = live(get(build_conn(), "/diagrams"))
+
+    html =
+      view
+      |> form("#phoenix-diagrams-search-form", %{"q" => "nonexistent-xyz"})
+      |> render_change()
+
+    assert html =~ "No diagrams match"
+  end
+
+  test "clicking the clear button resets the search and shows all diagrams" do
+    {:ok, view, _html} = live(get(build_conn(), "/diagrams"))
+
+    view
+    |> form("#phoenix-diagrams-search-form", %{"q" => "Auth"})
+    |> render_change()
+
+    assert has_element?(view, "button[aria-label='Clear search']")
+
+    html =
+      view
+      |> element("button[aria-label='Clear search']")
+      |> render_click()
+
+    assert html =~ "Auth Flow"
+    assert html =~ "Login Sequence"
+    refute has_element?(view, "button[aria-label='Clear search']")
+  end
+
   defp diagram_id(relative_file) do
     entry = %{key: Path.join(@diagrams_path, relative_file)}
     PhoenixDiagrams.DiagramLive.diagram_id(entry, @diagrams_path)

@@ -7,6 +7,7 @@ defmodule PhoenixDiagrams.Components.Sidebar do
   attr(:groups, :list, required: true)
   attr(:selected, :any, default: nil)
   attr(:diagrams_path, :string, required: true)
+  attr(:search, :string, default: "")
 
   def sidebar(assigns) do
     ~H"""
@@ -18,8 +19,38 @@ defmodule PhoenixDiagrams.Components.Sidebar do
         aria-label="Diagrams"
         class="phoenix-diagrams-sidebar menu bg-base-200 min-h-full p-4 gap-1"
       >
+        <form
+          :if={@entries != []}
+          id="phoenix-diagrams-search-form"
+          phx-change="search"
+          class="px-2 pb-2"
+        >
+          <div class="relative">
+            <input
+              type="search"
+              name="q"
+              value={@search}
+              placeholder="Search diagrams…"
+              aria-label="Search diagrams"
+              phx-debounce="300"
+              class="input input-sm input-bordered w-full pr-8"
+            />
+            <button
+              :if={@search != ""}
+              type="button"
+              phx-click="clear_search"
+              aria-label="Clear search"
+              class="absolute right-2 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-base-content"
+            >
+              ✕
+            </button>
+          </div>
+        </form>
         <p :if={@entries == []} class="px-2 text-sm text-base-content/60">
           No diagrams found in {@diagrams_path}
+        </p>
+        <p :if={@entries != [] && @groups == []} class="px-2 text-sm text-base-content/60">
+          No diagrams match "{@search}"
         </p>
         <li :for={{group, group_entries} <- @groups}>
           <h2 class="menu-title">{group}</h2>

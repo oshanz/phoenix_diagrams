@@ -46,6 +46,7 @@ defmodule PhoenixDiagrams.Components.Layout do
   attr(:selected, :any, default: nil)
   attr(:diagrams_path, :string, required: true)
   attr(:app_version, :string, default: nil)
+  attr(:search, :string, default: "")
 
   def layout(assigns) do
     ~H"""
@@ -64,7 +65,13 @@ defmodule PhoenixDiagrams.Components.Layout do
         </p>
         <.detail selected={@selected} />
       </div>
-      <.sidebar entries={@entries} groups={@groups} selected={@selected} diagrams_path={@diagrams_path} />
+      <.sidebar
+        entries={@entries}
+        groups={@groups}
+        selected={@selected}
+        diagrams_path={@diagrams_path}
+        search={@search}
+      />
     </div>
     """
   end

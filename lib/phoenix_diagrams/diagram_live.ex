@@ -14,7 +14,8 @@ defmodule PhoenixDiagrams.DiagramLive do
        entries: entries,
        groups: group_entries(entries),
        diagrams_path: diagrams_path,
-       app_version: session["app_version"]
+       app_version: session["app_version"],
+       search: ""
      )}
   end
 
@@ -39,6 +40,17 @@ defmodule PhoenixDiagrams.DiagramLive do
   end
 
   @impl true
+  def handle_event("search", %{"q" => query}, socket) do
+    {:noreply,
+     assign(socket, search: query, groups: group_entries(socket.assigns.entries, query))}
+  end
+
+  @impl true
+  def handle_event("clear_search", _params, socket) do
+    {:noreply, assign(socket, search: "", groups: group_entries(socket.assigns.entries))}
+  end
+
+  @impl true
   def handle_info({:file_event, _watcher_pid, {_path, _events}}, socket) do
     entries = Loader.scan(socket.assigns.diagrams_path)
     previous_key = is_map(socket.assigns.selected) && socket.assigns.selected.key
@@ -48,7 +60,11 @@ defmodule PhoenixDiagrams.DiagramLive do
         Enum.find(entries, &(!Map.has_key?(&1, :error)))
 
     {:noreply,
-     assign(socket, entries: entries, groups: group_entries(entries), selected: selected)}
+     assign(socket,
+       entries: entries,
+       groups: group_entries(entries, socket.assigns.search),
+       selected: selected
+     )}
   end
 
   def handle_info({:file_event, _watcher_pid, :stop}, socket), do: {:noreply, socket}
@@ -84,8 +100,9 @@ defmodule PhoenixDiagrams.DiagramLive do
     |> binary_part(0, 8)
   end
 
-  defp group_entries(entries) do
+  defp group_entries(entries, query \\ "") do
     entries
+    |> Enum.filter(&matches_search?(&1, query))
     |> Enum.reduce({[], %{}}, fn entry, {order, groups} ->
       group = entry[:group] || "Errors"
 
@@ -96,5 +113,13 @@ defmodule PhoenixDiagrams.DiagramLive do
       end
     end)
     |> then(fn {order, groups} -> Enum.map(order, &{&1, Map.fetch!(groups, &1)}) end)
+  end
+
+  defp matches_search?(_entry, ""), do: true
+
+  defp matches_search?(entry, query) do
+    (entry[:name] || entry.file)
+    |> String.downcase()
+    |> String.contains?(String.downcase(query))
   end
 end
