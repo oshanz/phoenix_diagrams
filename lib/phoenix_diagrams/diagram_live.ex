@@ -118,9 +118,7 @@ defmodule PhoenixDiagrams.DiagramLive do
 
   @doc false
   def diagram_slug(entry) do
-    name = entry[:name] || Path.basename(entry.file, Path.extname(entry.file))
-
-    name
+    entry.name
     |> String.downcase()
     |> String.replace(~r/[^a-z0-9]+/, "-")
     |> String.trim("-")
