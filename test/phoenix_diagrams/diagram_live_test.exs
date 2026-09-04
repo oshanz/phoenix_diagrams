@@ -17,9 +17,9 @@ defmodule PhoenixDiagrams.DiagramLiveTest do
   end
 
   test "does not render an app version when :app_version is not configured" do
-    {:ok, _view, html} = live(get(build_conn(), "/diagrams"))
+    {:ok, view, _html} = live(get(build_conn(), "/diagrams"))
 
-    refute html =~ "opacity-60"
+    refute has_element?(view, "span.opacity-60")
   end
 
   test "renders the configured app version in the navbar" do
