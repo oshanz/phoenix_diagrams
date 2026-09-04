@@ -53,6 +53,7 @@
   position: relative;
   width: var(--phoenix-diagrams-sidebar-width, 18rem);
   flex-shrink: 0;
+  overflow-x: hidden;
   overflow-y: auto;
   transition: width 120ms ease, padding 120ms ease;
 }

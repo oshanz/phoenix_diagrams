@@ -3,6 +3,14 @@ defmodule PhoenixDiagrams.RootLayout do
 
   use Phoenix.Component
 
+  @logo_svg_path Path.join(__DIR__, "icons/logo.svg")
+  @external_resource @logo_svg_path
+  @favicon_href "data:image/svg+xml," <>
+                  (@logo_svg_path
+                   |> File.read!()
+                   |> String.replace("currentColor", "#4f46e5")
+                   |> URI.encode(&(&1 not in [?<, ?>, ?", ?#, ?%])))
+
   attr(:page_title, :string, default: nil)
   attr(:conn, :map, required: true)
   attr(:inner_content, :any, required: true)
@@ -15,6 +23,7 @@ defmodule PhoenixDiagrams.RootLayout do
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="csrf-token" content={Plug.CSRFProtection.get_csrf_token()} />
+        <link rel="icon" type="image/svg+xml" href={favicon_href()} />
         <title>{@page_title || "Diagrams"}</title>
       </head>
       <body>
@@ -24,6 +33,8 @@ defmodule PhoenixDiagrams.RootLayout do
     </html>
     """
   end
+
+  defp favicon_href, do: @favicon_href
 
   defp bootstrap_script(conn) do
     base = String.trim_trailing(conn.request_path, "/")
