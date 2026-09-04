@@ -23,7 +23,7 @@ My diagrams were scattered across old Confluence pages, Notion docs, and Slack t
 ```elixir
 def deps do
   [
-    {:phoenix_diagrams, "~> 0.2", only: :dev}
+    {:phoenix_diagrams, "~> 0.3", only: :dev}
   ]
 end
 ```
