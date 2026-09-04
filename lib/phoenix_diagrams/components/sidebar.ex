@@ -60,7 +60,7 @@ defmodule PhoenixDiagrams.Components.Sidebar do
                 phx-click="select"
                 phx-value-key={entry.key}
                 aria-current={is_map(@selected) && @selected.key == entry.key && "true"}
-                class={entry_class(entry, @selected)}
+                class={["min-w-0" | List.wrap(entry_class(entry, @selected))]}
               >
                 <span
                   :if={Map.has_key?(entry, :error)}
@@ -68,7 +68,7 @@ defmodule PhoenixDiagrams.Components.Sidebar do
                   aria-hidden="true"
                 ></span>
                 <span :if={Map.has_key?(entry, :error)} class="sr-only">Error loading:</span>
-                {entry[:name] || entry.file}
+                <span class="truncate">{entry[:name] || entry.file}</span>
               </button>
             </li>
           </ul>
