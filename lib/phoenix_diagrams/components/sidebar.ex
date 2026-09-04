@@ -21,9 +21,8 @@ defmodule PhoenixDiagrams.Components.Sidebar do
         aria-label="Diagrams"
         class="phoenix-diagrams-sidebar menu bg-base-200 min-h-full p-4 gap-1"
       >
-        <div class="flex items-center gap-2 h-11 px-2">
-          <Icons.logo class="h-5 w-5 shrink-0" />
-          <span class="font-semibold">Diagrams</span>
+        <div class="flex items-center justify-center h-16 -mt-4 px-2">
+          <Icons.logo class="h-6 w-6 shrink-0" />
         </div>
         <form
           :if={@entries != []}

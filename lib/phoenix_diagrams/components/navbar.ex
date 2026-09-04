@@ -10,7 +10,7 @@ defmodule PhoenixDiagrams.Components.Navbar do
 
   def navbar(assigns) do
     ~H"""
-    <div class="navbar bg-base-200">
+    <div class="navbar h-16 min-h-16 bg-base-100 border-b border-base-300">
       <div class="flex-1 flex items-center">
         <label
           for="phoenix-diagrams-drawer"
@@ -29,7 +29,10 @@ defmodule PhoenixDiagrams.Components.Navbar do
         >
           <Icons.sidebar_collapse class="phoenix-diagrams-collapse-icon my-1.5 inline-block h-5 w-5" />
         </button>
-        <span class="ml-2 font-semibold">{navbar_title(@selected)}</span>
+        <div class="ml-1 flex items-center gap-2 min-w-0">
+          <Icons.logo class="h-5 w-5 shrink-0 lg:hidden" />
+          <span class="font-semibold truncate">{navbar_title(@selected)}</span>
+        </div>
       </div>
       <div class="flex-none flex items-center">
         <span :if={@app_version} class="mr-2 text-xs opacity-60">v{@app_version}</span>
