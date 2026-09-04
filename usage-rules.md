@@ -7,7 +7,7 @@ Embeds a Mermaid/PlantUML diagram browser into a host Phoenix app as a mountable
 Add the dep with `only: :dev` — it's a dev-time tool, not something to ship to production:
 
 ```elixir
-{:phoenix_diagrams, "~> 0.2", only: :dev}
+{:phoenix_diagrams, "~> 0.3", only: :dev}
 ```
 
 ```elixir
