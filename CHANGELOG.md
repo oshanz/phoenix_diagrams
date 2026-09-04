@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0]
+
+### Breaking changes
+- Previously shared URLs might not work
+
+### minor changes
+- Add search feature for diagrams
+- Add readable slugs and version-mismatch notice to diagram share links
+- Fix diagram drawer overflow
+- Add favicon and logo
+
 ## [0.2.7]
 
 - Add optional version option to display in navbar
