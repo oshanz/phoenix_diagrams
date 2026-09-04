@@ -13,9 +13,9 @@ defmodule PhoenixDiagrams.Components.Icons do
 
   @icons_dir Path.join(__DIR__, "../icons")
 
-  @outline ~w(bars_3 sun moon arrow_down_tray magnifying_glass_minus magnifying_glass_plus
+  @outline ~w(bars_3 sun moon arrow_down_tray magnifying_glass magnifying_glass_minus magnifying_glass_plus
                arrow_path arrows_pointing_out arrows_pointing_in document_duplicate
-               sidebar_collapse logo)a
+               sidebar_collapse logo x_mark)a
   @solid ~w(share)a
 
   Module.register_attribute(__MODULE__, :paths, accumulate: true)

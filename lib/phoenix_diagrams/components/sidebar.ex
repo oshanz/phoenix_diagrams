@@ -31,26 +31,26 @@ defmodule PhoenixDiagrams.Components.Sidebar do
           phx-change="search"
           class="px-2 pb-2"
         >
-          <div class="relative">
+          <label class="input input-sm w-full">
+            <Icons.magnifying_glass class="h-5 w-5 opacity-50" />
             <input
               type="search"
               name="q"
               value={@search}
-              placeholder="Search diagrams…"
+              placeholder="Search"
               aria-label="Search diagrams"
               phx-debounce="300"
-              class="input input-sm input-bordered w-full pr-8"
             />
             <button
               :if={@search != ""}
               type="button"
               phx-click="clear_search"
               aria-label="Clear search"
-              class="absolute right-2 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-base-content"
+              class="text-base-content/60 hover:text-base-content"
             >
-              ✕
+              <Icons.x_mark class="h-5 w-5" />
             </button>
-          </div>
+          </label>
         </form>
         <p :if={@entries == []} class="px-2 text-sm text-base-content/60">
           No diagrams found in {@diagrams_path}
