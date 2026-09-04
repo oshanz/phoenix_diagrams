@@ -22,7 +22,7 @@ scope "/" do
 end
 ```
 
-Mounts `PhoenixDiagrams.DiagramLive` at `GET /diagrams`. `:diagrams_path` is required — raises `ArgumentError` at compile time if missing, no default/app-config fallback.
+Mounts `PhoenixDiagrams.DiagramLive` at `GET /diagrams`. `:diagrams_path` is required — raises `ArgumentError` at compile time if missing, no default/app-config fallback. An optional `:app_version` string is shown next to the title in the navbar (e.g. `app_version: Application.spec(:my_app, :vsn) |> to_string()`); omit it and nothing is shown.
 
 ### Diagram source directory
 

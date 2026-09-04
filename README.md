@@ -45,7 +45,13 @@ defmodule MyAppWeb.Router do
 end
 ```
 
-This mounts `PhoenixDiagrams.DiagramLive` at `/diagrams`. `:diagrams_path` is required.
+This mounts `PhoenixDiagrams.DiagramLive` at `/diagrams`. `:diagrams_path` is required. You can also pass an optional `:app_version` string, shown next to the title in the navbar:
+
+```elixir
+live_phoenix_diagrams "/diagrams",
+  diagrams_path: "priv/diagrams",
+  app_version: Application.spec(:my_app, :vsn) |> to_string()
+```
 
 ### 2. Add a diagram
 
