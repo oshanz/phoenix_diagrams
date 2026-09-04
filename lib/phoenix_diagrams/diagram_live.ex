@@ -26,13 +26,24 @@ defmodule PhoenixDiagrams.DiagramLive do
     selected =
       select_entry(socket.assigns.entries, socket.assigns.diagrams_path, params["d"])
 
-    {:noreply,
-     assign(socket,
-       selected: selected,
-       path: URI.parse(uri).path,
-       url_version: params["v"],
-       version_notice_dismissed: false
-     )}
+    path = URI.parse(uri).path
+
+    socket =
+      assign(socket,
+        selected: selected,
+        path: path,
+        url_version: params["v"],
+        version_notice_dismissed: false
+      )
+
+    if connected?(socket) and is_nil(params["d"]) and is_map(selected) do
+      id = diagram_id(selected, socket.assigns.diagrams_path)
+      slug = diagram_slug(selected)
+      to = "#{path}?d=#{slug}-#{id}" <> version_query(socket.assigns.app_version)
+      {:noreply, push_patch(socket, to: to, replace: true)}
+    else
+      {:noreply, socket}
+    end
   end
 
   @impl true
