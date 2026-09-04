@@ -62,7 +62,7 @@ defmodule PhoenixDiagrams.DiagramLiveTest do
            )
 
     assert has_element?(view, "#phoenix-diagrams-share[phx-hook=PhoenixDiagramsShare]")
-    assert_patch(view, "/diagrams?d=" <> diagram_id("auth.exs"))
+    assert_patch(view, "/diagrams?d=auth-flow-" <> diagram_id("auth.exs"))
   end
 
   test "clicking a plantuml diagram name renders the detail pane with the plantuml hook" do
@@ -116,6 +116,59 @@ defmodule PhoenixDiagrams.DiagramLiveTest do
 
     assert html =~ "phoenix-diagrams-not-found"
     refute html =~ "graph TD"
+  end
+
+  test "mounting with a slug-prefixed ?d= param still resolves the diagram" do
+    {:ok, view, html} =
+      live(get(build_conn(), "/diagrams?d=login-sequence-#{diagram_id("login.exs")}"))
+
+    assert html =~ "@startuml"
+
+    assert has_element?(
+             view,
+             "#phoenix-diagrams-diagram-plantuml[phx-hook=PhoenixDiagramsPlantuml]"
+           )
+  end
+
+  test "clicking a diagram when app_version is configured appends v= to the patched url" do
+    {:ok, view, _html} = live(get(build_conn(), "/diagrams-versioned"))
+
+    view
+    |> element("button", "Auth Flow")
+    |> render_click()
+
+    assert_patch(view, "/diagrams-versioned?d=auth-flow-" <> diagram_id("auth.exs") <> "&v=1.2.3")
+  end
+
+  test "a matching ?v= param shows no version mismatch notice" do
+    {:ok, view, html} =
+      live(
+        get(
+          build_conn(),
+          "/diagrams-versioned?d=auth-flow-#{diagram_id("auth.exs")}&v=1.2.3"
+        )
+      )
+
+    refute html =~ "phoenix-diagrams-version-notice"
+  end
+
+  test "a mismatched ?v= param shows a dismissible banner" do
+    {:ok, view, html} =
+      live(
+        get(
+          build_conn(),
+          "/diagrams-versioned?d=auth-flow-#{diagram_id("auth.exs")}&v=0.9.0"
+        )
+      )
+
+    assert html =~ "phoenix-diagrams-version-notice"
+
+    html =
+      view
+      |> element("button[aria-label='Dismiss version notice']")
+      |> render_click()
+
+    refute html =~ "phoenix-diagrams-version-notice"
   end
 
   test "renders a search input in the sidebar" do

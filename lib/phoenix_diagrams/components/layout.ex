@@ -47,6 +47,8 @@ defmodule PhoenixDiagrams.Components.Layout do
   attr(:diagrams_path, :string, required: true)
   attr(:app_version, :string, default: nil)
   attr(:search, :string, default: "")
+  attr(:url_version, :string, default: nil)
+  attr(:version_notice_dismissed, :boolean, default: false)
 
   def layout(assigns) do
     ~H"""
@@ -63,7 +65,12 @@ defmodule PhoenixDiagrams.Components.Layout do
         <p class="sr-only" role="status">
           {(is_map(@selected) && (@selected[:name] || @selected.file)) || not_found_status(@selected)}
         </p>
-        <.detail selected={@selected} />
+        <.detail
+          selected={@selected}
+          app_version={@app_version}
+          url_version={@url_version}
+          version_notice_dismissed={@version_notice_dismissed}
+        />
       </div>
       <.sidebar
         entries={@entries}

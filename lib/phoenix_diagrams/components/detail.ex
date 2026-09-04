@@ -6,10 +6,33 @@ defmodule PhoenixDiagrams.Components.Detail do
   alias PhoenixDiagrams.Components.Icons
 
   attr(:selected, :any, default: nil)
+  attr(:app_version, :string, default: nil)
+  attr(:url_version, :string, default: nil)
+  attr(:version_notice_dismissed, :boolean, default: false)
 
   def detail(assigns) do
+    assigns = assign(assigns, :version_mismatch?, version_mismatch?(assigns))
+
     ~H"""
     <main class="phoenix-diagrams-detail flex-1 min-h-0 overflow-auto flex flex-col">
+      <div
+        :if={@version_mismatch? && !@version_notice_dismissed}
+        role="status"
+        class="phoenix-diagrams-version-notice alert p-2! flex items-center justify-start gap-2 bg-warning/10 text-warning-content border-warning/30"
+      >
+        <span>
+          Shared link version <strong>{@url_version}</strong> differs from current version
+          <strong>{@app_version}</strong>. The diagram may have changed.
+        </span>
+        <button
+          type="button"
+          phx-click="dismiss_version_notice"
+          class="btn btn-square btn-ghost btn-xs"
+          aria-label="Dismiss version notice"
+        >
+          ✕
+        </button>
+      </div>
       <div :if={is_nil(@selected)} class="hero min-h-[50vh] flex-1">
         <div class="hero-content text-center">
           <p class="text-base-content/60">Select a diagram from the sidebar.</p>
@@ -167,6 +190,11 @@ defmodule PhoenixDiagrams.Components.Detail do
     </main>
     """
   end
+
+  defp version_mismatch?(%{url_version: nil}), do: false
+  defp version_mismatch?(%{url_version: v, app_version: v}), do: false
+  defp version_mismatch?(%{app_version: nil}), do: false
+  defp version_mismatch?(_assigns), do: true
 
   defp diagram_hook(%{type: :plantuml}), do: "PhoenixDiagramsPlantuml"
   defp diagram_hook(_selected), do: "PhoenixDiagramsMermaid"

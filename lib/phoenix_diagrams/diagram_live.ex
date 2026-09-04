@@ -15,7 +15,9 @@ defmodule PhoenixDiagrams.DiagramLive do
        groups: group_entries(entries),
        diagrams_path: diagrams_path,
        app_version: session["app_version"],
-       search: ""
+       search: "",
+       url_version: nil,
+       version_notice_dismissed: false
      )}
   end
 
@@ -24,7 +26,13 @@ defmodule PhoenixDiagrams.DiagramLive do
     selected =
       select_entry(socket.assigns.entries, socket.assigns.diagrams_path, params["d"])
 
-    {:noreply, assign(socket, selected: selected, path: URI.parse(uri).path)}
+    {:noreply,
+     assign(socket,
+       selected: selected,
+       path: URI.parse(uri).path,
+       url_version: params["v"],
+       version_notice_dismissed: false
+     )}
   end
 
   @impl true
@@ -35,8 +43,15 @@ defmodule PhoenixDiagrams.DiagramLive do
 
       entry ->
         id = diagram_id(entry, socket.assigns.diagrams_path)
-        {:noreply, push_patch(socket, to: "#{socket.assigns.path}?d=#{id}")}
+        slug = diagram_slug(entry)
+        to = "#{socket.assigns.path}?d=#{slug}-#{id}" <> version_query(socket.assigns.app_version)
+        {:noreply, push_patch(socket, to: to)}
     end
+  end
+
+  @impl true
+  def handle_event("dismiss_version_notice", _params, socket) do
+    {:noreply, assign(socket, version_notice_dismissed: true)}
   end
 
   @impl true
@@ -86,7 +101,8 @@ defmodule PhoenixDiagrams.DiagramLive do
   defp select_entry(entries, _diagrams_path, nil), do: default_entry(entries)
 
   defp select_entry(entries, diagrams_path, id) do
-    Enum.find(entries, &(diagram_id(&1, diagrams_path) == id)) || :not_found
+    hash = String.slice(id, -8, 8)
+    Enum.find(entries, &(diagram_id(&1, diagrams_path) == hash)) || :not_found
   end
 
   defp default_entry(entries), do: Enum.find(entries, &(!Map.has_key?(&1, :error)))
@@ -99,6 +115,19 @@ defmodule PhoenixDiagrams.DiagramLive do
     |> Base.encode16(case: :lower)
     |> binary_part(0, 8)
   end
+
+  @doc false
+  def diagram_slug(entry) do
+    name = entry[:name] || Path.basename(entry.file, Path.extname(entry.file))
+
+    name
+    |> String.downcase()
+    |> String.replace(~r/[^a-z0-9]+/, "-")
+    |> String.trim("-")
+  end
+
+  defp version_query(nil), do: ""
+  defp version_query(app_version), do: "&v=#{URI.encode_www_form(app_version)}"
 
   defp group_entries(entries, query \\ "") do
     entries
