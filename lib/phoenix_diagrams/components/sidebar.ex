@@ -3,6 +3,8 @@ defmodule PhoenixDiagrams.Components.Sidebar do
 
   use Phoenix.Component
 
+  alias PhoenixDiagrams.Components.Icons
+
   attr(:entries, :list, required: true)
   attr(:groups, :list, required: true)
   attr(:selected, :any, default: nil)
@@ -19,6 +21,10 @@ defmodule PhoenixDiagrams.Components.Sidebar do
         aria-label="Diagrams"
         class="phoenix-diagrams-sidebar menu bg-base-200 min-h-full p-4 gap-1"
       >
+        <div class="flex items-center gap-2 h-11 px-2">
+          <Icons.logo class="h-5 w-5 shrink-0" />
+          <span class="font-semibold">Diagrams</span>
+        </div>
         <form
           :if={@entries != []}
           id="phoenix-diagrams-search-form"
