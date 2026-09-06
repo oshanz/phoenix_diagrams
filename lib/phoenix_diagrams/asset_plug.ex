@@ -5,7 +5,21 @@ defmodule PhoenixDiagrams.AssetPlug do
 
   @behaviour Plug
 
-  @cache_control "public, max-age=31536000, immutable"
+  @phoenix_static Plug.Static.init(
+                    at: "/",
+                    from: {:phoenix, "priv/static"},
+                    only: ["phoenix.mjs"]
+                  )
+  @phoenix_live_view_static Plug.Static.init(
+                              at: "/",
+                              from: {:phoenix_live_view, "priv/static"},
+                              only: ["phoenix_live_view.esm.js"]
+                            )
+  @build_static Plug.Static.init(
+                  at: "/",
+                  from: {:phoenix_diagrams, "priv/static/phoenix_diagrams/build"},
+                  only: ["bundle.js", "mermaid.js", "plantuml.js"]
+                )
 
   @impl true
   def init(opts), do: opts
@@ -47,50 +61,31 @@ defmodule PhoenixDiagrams.AssetPlug do
 
   @impl true
   def call(%Plug.Conn{path_info: ["phoenix.mjs"]} = conn, _opts) do
-    serve_app_file(conn, :phoenix, "priv/static/phoenix.mjs")
+    serve(conn, @phoenix_static)
   end
 
   def call(%Plug.Conn{path_info: ["phoenix_live_view.esm.js"]} = conn, _opts) do
-    serve_app_file(conn, :phoenix_live_view, "priv/static/phoenix_live_view.esm.js")
-  end
-
-  def call(%Plug.Conn{path_info: [file]} = conn, _opts) do
-    case build_asset_path(file) do
-      {:ok, path} -> serve_file(conn, path)
-      :error -> send_resp(conn, 404, "Not Found")
-    end
+    serve(conn, @phoenix_live_view_static)
   end
 
   def call(conn, _opts) do
-    send_resp(conn, 404, "Not Found")
+    serve(conn, @build_static)
   end
 
-  # bundle.js plus its esbuild code-split chunks (e.g. chunk-<hash>.js), so
-  # PhoenixDiagramsPlantuml's dynamic import() of the heavy @plantuml/core
-  # module can be served without hardcoding every generated chunk name.
-  defp build_asset_path(file) do
-    if Regex.match?(~r/^[A-Za-z0-9_.-]+\.js$/, file) and not String.contains?(file, "..") do
-      path = Path.join(build_dir(), file)
-      if File.regular?(path), do: {:ok, path}, else: :error
-    else
-      :error
-    end
-  end
-
-  defp serve_app_file(conn, app, relative_path) do
-    path = Application.app_dir(app, relative_path)
-    serve_file(conn, path)
-  rescue
-    _ -> send_resp(conn, 500, "PhoenixDiagrams asset unavailable")
-  end
-
-  defp serve_file(conn, path) do
+  # Plug.Static handles path-traversal safety, content-type lookup, and both
+  # ETag and `?vsn=`-versioned cache-control - see RootLayout.bootstrap_script,
+  # which appends `?vsn=<hash>` to these URLs so the versioned (long-lived,
+  # immutable) cache path is used instead of the default ETag one. Each
+  # config's `:only` list restricts it to exactly the file(s) it should ever
+  # serve, so an unmatched or malicious path leaves the conn untouched
+  # (state: :unset) rather than raising or falling through to the filesystem.
+  defp serve(conn, static_opts) do
     conn
     |> put_private(:plug_skip_csrf_protection, true)
-    |> put_resp_content_type("text/javascript")
-    |> put_resp_header("cache-control", @cache_control)
-    |> send_resp(200, File.read!(path))
-  rescue
-    _ -> send_resp(conn, 500, "PhoenixDiagrams asset unavailable")
+    |> Plug.Static.call(static_opts)
+    |> reply_or_404()
   end
+
+  defp reply_or_404(%Plug.Conn{state: :unset} = conn), do: send_resp(conn, 404, "Not Found")
+  defp reply_or_404(conn), do: conn
 end
