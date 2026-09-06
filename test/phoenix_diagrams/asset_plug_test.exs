@@ -55,6 +55,12 @@ defmodule PhoenixDiagrams.AssetPlugTest do
     assert conn.status == 404
   end
 
+  test "404s a path-traversal attempt" do
+    conn = conn(:get, "/..") |> PhoenixDiagrams.AssetPlug.call(@opts)
+
+    assert conn.status == 404
+  end
+
   test "404s a nested unknown path" do
     conn = conn(:get, "/sub/dir.js") |> PhoenixDiagrams.AssetPlug.call(@opts)
 
