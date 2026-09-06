@@ -5,7 +5,8 @@
   },
   "dependencies": {
     "@plantuml/core": "^1.2026.7",
-    "mermaid": "^11.17.2"
+    "mermaid": "^11.17.2",
+    "prismjs": "^1.30.0"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
