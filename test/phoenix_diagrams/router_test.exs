@@ -14,18 +14,22 @@ defmodule PhoenixDiagrams.RouterTest do
     assert conn.resp_body =~ "/diagrams/phoenix-diagrams-assets/phoenix_live_view.esm.js"
     assert conn.resp_body =~ "/diagrams/phoenix-diagrams-assets/bundle.js"
     assert conn.resp_body =~ "new LiveSocket(\"/live\", Socket"
-    assert conn.resp_body =~ ~r{/phoenix-diagrams-assets/bundle\.js\?v=[\w-]+"}
+    assert conn.resp_body =~ ~r{/phoenix-diagrams-assets/bundle\.js\?vsn=[\w-]+"}
   end
 
   test "the asset version fingerprint is stable across requests and asset URLs served through it still resolve" do
     conn1 = get(build_conn(), "/diagrams")
     conn2 = get(build_conn(), "/diagrams")
 
-    [version1] = Regex.run(~r{bundle\.js\?v=([\w-]+)"}, conn1.resp_body, capture: :all_but_first)
-    [version2] = Regex.run(~r{bundle\.js\?v=([\w-]+)"}, conn2.resp_body, capture: :all_but_first)
+    [version1] =
+      Regex.run(~r{bundle\.js\?vsn=([\w-]+)"}, conn1.resp_body, capture: :all_but_first)
+
+    [version2] =
+      Regex.run(~r{bundle\.js\?vsn=([\w-]+)"}, conn2.resp_body, capture: :all_but_first)
+
     assert version1 == version2
 
-    conn3 = get(build_conn(), "/diagrams/phoenix-diagrams-assets/bundle.js?v=#{version1}")
+    conn3 = get(build_conn(), "/diagrams/phoenix-diagrams-assets/bundle.js?vsn=#{version1}")
     assert conn3.status == 200
   end
 
@@ -42,6 +46,6 @@ defmodule PhoenixDiagrams.RouterTest do
     conn = get(build_conn(), "/diagrams/phoenix-diagrams-assets/bundle.js")
 
     assert conn.status == 200
-    assert get_resp_header(conn, "content-type") == ["text/javascript; charset=utf-8"]
+    assert get_resp_header(conn, "content-type") == ["text/javascript"]
   end
 end

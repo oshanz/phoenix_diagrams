@@ -41,14 +41,14 @@ defmodule PhoenixDiagrams.RootLayout do
     v = PhoenixDiagrams.AssetPlug.asset_version()
 
     """
-    import {Socket} from "#{base}/phoenix-diagrams-assets/phoenix.mjs?v=#{v}";
-    import {LiveSocket} from "#{base}/phoenix-diagrams-assets/phoenix_live_view.esm.js?v=#{v}";
-    import {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsShare, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom, PhoenixDiagramsSidebar} from "#{base}/phoenix-diagrams-assets/bundle.js?v=#{v}";
+    import {Socket} from "#{base}/phoenix-diagrams-assets/phoenix.mjs?vsn=#{v}";
+    import {LiveSocket} from "#{base}/phoenix-diagrams-assets/phoenix_live_view.esm.js?vsn=#{v}";
+    import {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsShare, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom, PhoenixDiagramsSidebar, PhoenixDiagramsCodeHighlight} from "#{base}/phoenix-diagrams-assets/bundle.js?vsn=#{v}";
 
     const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const liveSocket = new LiveSocket("/live", Socket, {
       params: {_csrf_token: csrfToken},
-      hooks: {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsShare, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom, PhoenixDiagramsSidebar},
+      hooks: {PhoenixDiagramsMermaid, PhoenixDiagramsTheme, PhoenixDiagramsPlantuml, PhoenixDiagramsDownload, PhoenixDiagramsCopy, PhoenixDiagramsShare, PhoenixDiagramsFullscreen, PhoenixDiagramsZoom, PhoenixDiagramsSidebar, PhoenixDiagramsCodeHighlight},
     });
     liveSocket.connect();
     """

@@ -182,7 +182,11 @@ defmodule PhoenixDiagrams.Components.Detail do
                   <Icons.document_duplicate class="h-5 w-5" />
                 </button>
               </div>
-              <pre class="rounded-b-box border border-t-0 border-base-300 bg-base-200 p-4 overflow-auto"><code id="phoenix-diagrams-code">{@selected.source}</code></pre>
+              <pre class="rounded-b-box border border-t-0 border-base-300 bg-base-200 p-4 overflow-auto"><code
+                id="phoenix-diagrams-code"
+                phx-hook="PhoenixDiagramsCodeHighlight"
+                data-language={@selected.type}
+              >{@selected.source}</code></pre>
             </div>
           </div>
         </div>

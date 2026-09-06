@@ -115,3 +115,46 @@
 #phoenix-diagrams-share.phoenix-diagrams-share-clicked {
   animation: phoenix-diagrams-pulse 300ms ease-in-out;
 }
+
+/* Prism token colors for the Code tab, keyed to each daisyUI theme so the
+   diagram source stays legible without a separate light/dark Prism theme. */
+.phoenix-diagrams-root #phoenix-diagrams-code .token.comment {
+  color: var(--color-base-content);
+  opacity: 0.5;
+  font-style: italic;
+}
+
+.phoenix-diagrams-root #phoenix-diagrams-code .token.string {
+  color: var(--color-success);
+}
+
+.phoenix-diagrams-root #phoenix-diagrams-code .token.keyword {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.phoenix-diagrams-root #phoenix-diagrams-code .token.operator {
+  color: var(--color-warning);
+}
+
+.phoenix-diagrams-root #phoenix-diagrams-code .token.punctuation {
+  color: var(--color-base-content);
+  opacity: 0.6;
+}
+
+.phoenix-diagrams-root #phoenix-diagrams-code .token.property {
+  color: var(--color-secondary);
+}
+
+.phoenix-diagrams-root #phoenix-diagrams-code .token.important {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.phoenix-diagrams-root #phoenix-diagrams-code .token.symbol {
+  color: var(--color-accent);
+}
+
+.phoenix-diagrams-root #phoenix-diagrams-code .token.number {
+  color: var(--color-accent);
+}

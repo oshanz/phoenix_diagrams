@@ -6,3 +6,4 @@ export {PhoenixDiagramsShare} from "./share_hook";
 export {PhoenixDiagramsFullscreen} from "./fullscreen_hook";
 export {PhoenixDiagramsZoom} from "./zoom_hook";
 export {PhoenixDiagramsSidebar} from "./sidebar_hook";
+export {PhoenixDiagramsCodeHighlight} from "./highlight_hook";

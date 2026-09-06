@@ -1,4 +1,14 @@
-import mermaid from "mermaid";
+// mermaid (several MB) is built as its own entry point (mermaid_entry.js ->
+// build/mermaid.js) and fetched lazily here on first mount instead of
+// bloating every page's bundle.js.
+let mermaidPromise = null;
+
+function loadMermaid() {
+  if (!mermaidPromise) {
+    mermaidPromise = import(new URL("./mermaid.js", import.meta.url)).then((m) => m.default);
+  }
+  return mermaidPromise;
+}
 
 const THEME_STORAGE_KEY = "phoenix_diagrams_theme";
 const THEME_CHANGED_EVENT = "phoenix-diagrams-theme-changed";
@@ -87,8 +97,6 @@ function resolveTheme() {
   return readStoredTheme() || (systemPrefersDark() ? "dark" : "light");
 }
 
-mermaid.initialize({ startOnLoad: false });
-
 export const PhoenixDiagramsMermaid = {
   mounted() {
     this.root = this.el.closest(".phoenix-diagrams-root");
@@ -119,7 +127,8 @@ export const PhoenixDiagramsMermaid = {
         el.innerHTML = loadingMarkup();
         return waitForPaint();
       })
-      .then(() => {
+      .then(() => loadMermaid())
+      .then((mermaid) => {
         mermaid.initialize(
           theme === "dark"
             ? {
